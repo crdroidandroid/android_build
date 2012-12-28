@@ -14,6 +14,7 @@ Invoke ". build/envsetup.sh" from your shell to add the following functions to y
 - cgrep:     Greps on all local C/C++ files.
 - ggrep:     Greps on all local Gradle files.
 - jgrep:     Greps on all local Java files.
+- cout:      Changes directory to out.
 - resgrep:   Greps on all local res/*.xml files.
 - mangrep:   Greps on all local AndroidManifest.xml files.
 - mgrep:     Greps on all local Makefiles files.
@@ -976,6 +977,15 @@ function croot()
         \cd $(gettop)
     else
         echo "Couldn't locate the top of the tree.  Try setting TOP."
+    fi
+}
+
+function cout()
+{
+    if [  "$OUT" ]; then
+        cd $OUT
+    else
+        echo "Couldn't locate out directory.  Try setting OUT."
     fi
 }
 
