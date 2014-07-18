@@ -1700,6 +1700,12 @@ otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 crdroid: otapackage
 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(CRDROID_TARGET_PACKAGE)
 	$(hide) $(MD5SUM) $(CRDROID_TARGET_PACKAGE) > $(CRDROID_TARGET_PACKAGE).md5sum
+ifeq ($(USE_PREBUILT_CHROMIUM),1)
+ifneq ($(PRODUCT_PREBUILT_WEBVIEWCHROMIUM),yes)
+	@echo "Running Chromium prebuilt setup script..."
+	$(hide) . $(TOPDIR)vendor/crdroid/utils/chromium_prebuilt.sh $(TOP)
+endif
+endif
 	@echo -e ${CL_CYN}"Package Complete: $(CRDROID_TARGET_PACKAGE)"${CL_RST}
 
 endif    # recovery_fstab is defined
