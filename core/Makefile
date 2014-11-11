@@ -1609,9 +1609,6 @@ CRDROID_TARGET_PACKAGE := $(PRODUCT_OUT)/$(CRDROID_VERSION).zip
 .PHONY: otapackage crdroid
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 crdroid: otapackage
-ifneq ($(TARGET_CUSTOM_RELEASETOOL),)
-	$(error TARGET_CUSTOM_RELEASETOOL is deprecated)
-endif
 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(CRDROID_TARGET_PACKAGE)
 	$(hide) $(MD5SUM) $(CRDROID_TARGET_PACKAGE) > $(CRDROID_TARGET_PACKAGE).md5sum
 	@echo -e ${CL_CYN}"Package Complete: $(CRDROID_TARGET_PACKAGE)"${CL_RST}
