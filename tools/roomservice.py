@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Copyright (C) 2012-2013, The crDroid Android Project
+# Copyright (C) 2012-2013, crDroid Android Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -170,12 +170,12 @@ def add_to_manifest(repositories, fallback_branch = None):
         repo_name = repository['repository']
         repo_target = repository['target_path']
         if exists_in_tree(lm, repo_name):
-            print('crDroid/%s already exists' % (repo_name))
+            print('crdroidandroid/%s already exists' % (repo_name))
             continue
 
-        print('Adding dependency: crDroid/%s -> %s' % (repo_name, repo_target))
+        print('Adding dependency: crdroidandroid/%s -> %s' % (repo_name, repo_target))
         project = ElementTree.Element("project", attrib = { "path": repo_target,
-            "remote": "github", "name": "crDroid/%s" % repo_name })
+            "remote": "github", "name": "crdroidandroid/%s" % repo_name })
 
         if 'branch' in repository:
             project.set('revision',repository['branch'])
@@ -206,7 +206,7 @@ def fetch_dependencies(repo_path, fallback_branch = None):
         fetch_list = []
 
         for dependency in dependencies:
-            if not is_in_manifest("crDroid/%s" % dependency['repository']):
+            if not is_in_manifest("crdroidandroid/%s" % dependency['repository']):
                 fetch_list.append(dependency)
                 syncable_repos.append(dependency['target_path'])
 
