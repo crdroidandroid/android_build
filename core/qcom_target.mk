@@ -23,17 +23,17 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
         TARGET_GLOBAL_CPPFLAGS += -DQCOM_DIRECTTRACK
     endif
 
-$(call project-set-path,qcom-audio,hardware/qcom/audio-caf)
+$(call project-set-path,qcom-audio,hardware/qcom/audio-caf/$(TARGET_BOARD_PLATFORM))
 $(call qcom-set-path-variant,CAMERA,camera)
-$(call project-set-path,qcom-display,hardware/qcom/display-caf)
+$(call project-set-path,qcom-display,hardware/qcom/display-caf/$(TARGET_BOARD_PLATFORM))
 $(call qcom-set-path-variant,GPS,gps)
-$(call project-set-path,qcom-media,hardware/qcom/media-caf)
+$(call project-set-path,qcom-media,hardware/qcom/media-caf/$(TARGET_BOARD_PLATFORM))
 $(call qcom-set-path-variant,SENSORS,sensors)
 else
-$(call project-set-path,qcom-audio,hardware/qcom/audio)
+$(call project-set-path,qcom-audio,hardware/qcom/audio/default)
 $(call qcom-set-path-variant,CAMERA,camera)
-$(call project-set-path,qcom-display,hardware/qcom/display)
+$(call project-set-path,qcom-display,hardware/qcom/display/$(TARGET_BOARD_PLATFORM))
 $(call qcom-set-path-variant,GPS,gps)
-$(call project-set-path,qcom-media,hardware/qcom/media)
+$(call project-set-path,qcom-media,hardware/qcom/media/default)
 $(call qcom-set-path-variant,SENSORS,sensors)
 endif
