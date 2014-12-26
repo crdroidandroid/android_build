@@ -129,7 +129,7 @@ TARGET_VENDOR_RELEASE_BUILD_ID := $(BUILD_NUMBER)
 endif
 
 # A human-readable string that descibes this build in detail.
-build_desc := $(TARGET_VENDOR_PRODUCT_NAME)-$(TARGET_BUILD_VARIANT) $(PLATFORM_VERSION) $(BUILD_ID) $(TARGET_VENDOR_RELEASE_BUILD_ID) $(BUILD_VERSION_TAGS)
+build_desc := $(BUILD_ID)
 $(INSTALLED_BUILD_PROP_TARGET): PRIVATE_BUILD_DESC := $(build_desc)
 
 # The string used to uniquely identify this build;  used by the OTA server.
