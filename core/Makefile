@@ -1928,6 +1928,12 @@ bacon: otapackage
 	@echo -e ${CL_CYN}"FileSize in MB : `ls -lh $(CM_TARGET_PACKAGE) | cut -d ' ' -f 5`"
 	@echo -e ${CL_CYN}"FileSize in Bytes : `ls -l $(CM_TARGET_PACKAGE) | cut -d ' ' -f 5`"
 
+ifeq ($(CRDROID_CHANGELOG),true)
+# Generate changelog
+	$(hide) ./vendor/crdroid/tools/changelog
+	$(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/$(CRDROID_VERSION)-$(TARGET_PRODUCT).txt
+endif
+
 # -----------------------------------------------------------------
 # The factory package
 
