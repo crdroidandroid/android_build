@@ -1224,6 +1224,8 @@ FULL_SYSTEMIMAGE_DEPS := $(INTERNAL_SYSTEMIMAGE_FILES) $(INTERNAL_USERIMAGES_DEP
 # system image.
 INSTALLED_FILES_FILE := $(PRODUCT_OUT)/installed-files.txt
 $(INSTALLED_FILES_FILE): $(FULL_SYSTEMIMAGE_DEPS)
+	$(hide) ./vendor/cm/tools/changelog
+	$(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/$(CRDROID_VERSION)-$(TARGET_PRODUCT).txt
 	@echo Installed file list: $@
 	@mkdir -p $(dir $@)
 	@rm -f $@
@@ -2231,6 +2233,7 @@ bacon: otapackage
 	@echo -e ${CL_CYN}"FileSize in Bytes : `ls -l $(CM_TARGET_PACKAGE) | cut -d ' ' -f 5`"
 
 endif    # build_ota_package
+
 # -----------------------------------------------------------------
 # The factory package
 
