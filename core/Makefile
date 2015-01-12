@@ -1901,6 +1901,12 @@ crdroid: otapackage
 	$(hide) $(MD5SUM) $(CRDROID_TARGET_PACKAGE) > $(CRDROID_TARGET_PACKAGE).md5sum
 	@echo -e ${CL_CYN}"Package Complete: $(CRDROID_TARGET_PACKAGE)"${CL_RST}
 
+ifeq ($(CRDROID_CHANGELOG),true)
+# Generate changelog
+	$(hide) ./vendor/crdroid/tools/changelog
+	$(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/$(CRDROID_VERSION)-$(TARGET_PRODUCT).txt
+endif
+
 # -----------------------------------------------------------------
 # The factory package
 
