@@ -1708,6 +1708,12 @@ endif
 endif
 	@echo -e ${CL_CYN}"Package Complete: $(CRDROID_TARGET_PACKAGE)"${CL_RST}
 
+ifeq ($(CRDROID_CHANGELOG),true)
+# Generate changelog
+	$(hide) ./vendor/crdroid/tools/changelog
+	$(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/$(CRDROID_VERSION)-$(TARGET_PRODUCT).txt
+endif
+
 endif    # recovery_fstab is defined
 endif    # TARGET_NO_KERNEL != true
 endif    # TARGET_DEVICE != generic*
