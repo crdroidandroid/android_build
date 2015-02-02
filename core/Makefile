@@ -1144,6 +1144,8 @@ FULL_SYSTEMIMAGE_DEPS := $(INTERNAL_SYSTEMIMAGE_FILES) $(INTERNAL_USERIMAGES_DEP
 # system image.
 INSTALLED_FILES_FILE := $(PRODUCT_OUT)/installed-files.txt
 $(INSTALLED_FILES_FILE): $(FULL_SYSTEMIMAGE_DEPS)
+	$(hide) ./vendor/crdroid/tools/changelog
+	$(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/$(CRDROID_VERSION)-$(TARGET_PRODUCT).txt
 	@echo Installed file list: $@
 	@mkdir -p $(dir $@)
 	@rm -f $@
@@ -1900,12 +1902,6 @@ crdroid: otapackage
 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(CRDROID_TARGET_PACKAGE)
 	$(hide) $(MD5SUM) $(CRDROID_TARGET_PACKAGE) > $(CRDROID_TARGET_PACKAGE).md5sum
 	@echo -e ${CL_CYN}"Package Complete: $(CRDROID_TARGET_PACKAGE)"${CL_RST}
-
-ifeq ($(CRDROID_CHANGELOG),true)
-# Generate changelog
-	$(hide) ./vendor/crdroid/tools/changelog
-	$(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/$(CRDROID_VERSION)-$(TARGET_PRODUCT).txt
-endif
 
 # -----------------------------------------------------------------
 # The factory package
