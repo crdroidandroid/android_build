@@ -181,7 +181,7 @@ include $(BUILD_SYSTEM)/device.mk
 
 # A CRDROID build needs only the CRDROID product makefiles.
 ifneq ($(CRDROID_BUILD),)
-  all_product_configs := $(shell ls device/*/$(CRDROID_BUILD)/crdroid.mk)
+  all_product_configs := $(shell find device -path "*/$(CRDROID_BUILD)/crdroid.mk")
 else
   ifneq ($(strip $(TARGET_BUILD_APPS)),)
   # An unbundled app build needs only the core product makefiles.
