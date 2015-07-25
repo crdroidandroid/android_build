@@ -1561,6 +1561,9 @@ endif
 	$(hide) $(foreach t,$(INSTALLED_RADIOIMAGE_TARGET),\
 	            mkdir -p $(zip_root)/RADIO; \
 	            $(ACP) $(t) $(zip_root)/RADIO/$(notdir $(t));)
+	$(hide) $(foreach fi,$(PRODUCT_FACTORYIMAGE_FILES),\
+		mkdir -p $(zip_root)/FACTORY; \
+		$(ACP) $(fi) $(zip_root)/FACTORY/$(notdir $(fi));)
 	@# Contents of the system image
 	$(hide) $(call package_files-copy-root, \
 		$(SYSTEMIMAGE_SOURCE_DIR),$(zip_root)/SYSTEM)
@@ -1621,6 +1624,9 @@ ifneq ($(OEM_THUMBPRINT_PROPERTIES),)
 endif
 ifdef BUILD_NO
 	$(hide) echo "build_number=$(BUILD_NO)" >> $(zip_root)/META/misc_info.txt
+endif
+ifdef TARGET_RELEASETOOL_FACTORY_FROM_TARGET_SCRIPT
+	$(hide) echo "factory_from_target_script=$(TARGET_RELEASETOOL_FACTORY_FROM_TARGET_SCRIPT)" >> $(zip_root)/META/misc_info.txt
 endif
 	$(call generate-userimage-prop-dictionary, $(zip_root)/META/misc_info.txt)
 ifeq ($(TARGET_RELEASETOOL_MAKE_RECOVERY_PATCH_SCRIPT),)
