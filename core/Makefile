@@ -864,6 +864,11 @@ else
 recovery_resources_common := $(recovery_resources_common)-xhdpi
 endif
 
+ifneq (,$(RECOVERY_EXTRA_RESOURCE_DIR))
+recovery_resources_extra := $(strip \
+  $(wildcard $(RECOVERY_EXTRA_RESOURCE_DIR)/res-$(recovery_density)))
+endif
+
 # Select the 18x32 font on high-density devices (xhdpi and up); and
 # the 12x22 font on other devices.  Note that the font selected here
 # can be overridden for a particular device by putting a font.png in
@@ -887,7 +892,9 @@ endif
 
 recovery_resources_private := $(strip $(wildcard $(TARGET_DEVICE_DIR)/recovery/res))
 recovery_resource_deps := $(shell find $(recovery_resources_common) \
-  $(recovery_resources_private) -type f)
+  $(recovery_resources_extra) $(recovery_resources_private) -type f)
+
+
 ifdef TARGET_RECOVERY_FSTAB
 recovery_fstab := $(TARGET_RECOVERY_FSTAB)
 else
@@ -958,10 +965,8 @@ $(RECOVERY_INSTALL_OTA_KEYS): $(OTA_PUBLIC_KEYS) $(DUMPKEY_JAR) $(extra_keys)
 	@mkdir -p $(dir $@)
 	java -jar $(DUMPKEY_JAR) $(PRIVATE_OTA_PUBLIC_KEYS) $(extra_keys) > $@
 
-RECOVERYIMAGE_ID_FILE := $(PRODUCT_OUT)/recovery.id
-# $(1): output file
-define build-recoveryimage-target
-  @echo -e ${CL_CYN}"----- Making recovery image ------"${CL_RST}
+define build-recoveryramdisk
+  @echo -e ${CL_CYN}"----- Making recovery ramdisk ------"${CL_RST}
   $(hide) mkdir -p $(TARGET_RECOVERY_OUT)
   $(hide) mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/etc $(TARGET_RECOVERY_ROOT_OUT)/tmp
   @echo -e ${CL_CYN}"Copying baseline ramdisk..."${CL_RST}
@@ -975,6 +980,8 @@ define build-recoveryimage-target
   $(hide) mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/res
   $(hide) rm -rf $(TARGET_RECOVERY_ROOT_OUT)/res/*
   $(hide) cp -rf $(recovery_resources_common)/* $(TARGET_RECOVERY_ROOT_OUT)/res
+  $(hide) $(foreach item,$(recovery_resources_extra), \
+    cp -rf $(item)/* $(TARGET_RECOVERY_ROOT_OUT)/res;)
   $(hide) cp -f $(recovery_font) $(TARGET_RECOVERY_ROOT_OUT)/res/images/font.png
   $(hide) $(foreach item,$(recovery_root_private), \
     cp -rf $(item) $(TARGET_RECOVERY_OUT)/;)
@@ -985,25 +992,23 @@ define build-recoveryimage-target
   $(hide) cp $(RECOVERY_INSTALL_OTA_KEYS) $(TARGET_RECOVERY_ROOT_OUT)/res/keys
   $(hide) cat $(INSTALLED_DEFAULT_PROP_TARGET) $(recovery_build_prop) \
           > $(TARGET_RECOVERY_ROOT_OUT)/default.prop
-  $(hide) $(MKBOOTFS) -d $(TARGET_OUT) $(TARGET_RECOVERY_ROOT_OUT) | $(MINIGZIP) > $(recovery_ramdisk)
-
-  $(if $(BOARD_CUSTOM_BOOTIMG_MK),,
-    $(if $(filter true,$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_VBOOT)), \
-      $(hide) $(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $(1).unsigned, \
-      $(hide) $(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $(1) --id > $(RECOVERYIMAGE_ID_FILE))
-    $(if $(filter true,$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_BOOT_SIGNER)),\
-      $(BOOT_SIGNER) /recovery $(1) $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY).pk8 $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY).x509.pem $(1))
-    $(if $(filter true,$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_VBOOT)), \
-      $(VBOOT_SIGNER) $(FUTILITY) $(1).unsigned $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VBOOT_SIGNING_KEY).vbpubk $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VBOOT_SIGNING_KEY).vbprivk $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VBOOT_SIGNING_SUBKEY).vbprivk $(1).keyblock $(1))
-    $(hide) $(call assert-max-image-size,$(1),$(BOARD_RECOVERYIMAGE_PARTITION_SIZE))
-    @echo -e ${CL_CYN}"Made recovery image: $@"${CL_RST})
 endef
 
-$(recovery_uncompressed_ramdisk): $(MINIGZIP) $(recovery_ramdisk)
-	@echo -e ${CL_CYN}"----- Making uncompressed recovery ramdisk ------"${CL_RST}
-	$(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) > $@
+RECOVERYIMAGE_ID_FILE := $(PRODUCT_OUT)/recovery.id
+# $(1): output file
+define build-recoveryimage-target
+  $(if $(filter true,$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_VBOOT)), \
+    $(hide) $(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $(1).unsigned, \
+    $(hide) $(MKBOOTIMG) $(INTERNAL_RECOVERYIMAGE_ARGS) $(BOARD_MKBOOTIMG_ARGS) --output $(1) --id > $(RECOVERYIMAGE_ID_FILE))
+  $(if $(filter true,$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_BOOT_SIGNER)),\
+    $(BOOT_SIGNER) /recovery $(1) $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY).pk8 $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VERITY_SIGNING_KEY).x509.pem $(1))
+  $(if $(filter true,$(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_SUPPORTS_VBOOT)), \
+    $(VBOOT_SIGNER) $(FUTILITY) $(1).unsigned $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VBOOT_SIGNING_KEY).vbpubk $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VBOOT_SIGNING_KEY).vbprivk $(PRODUCTS.$(INTERNAL_PRODUCT).PRODUCT_VBOOT_SIGNING_SUBKEY).vbprivk $(1).keyblock $(1))
+  $(hide) $(call assert-max-image-size,$(1),$(BOARD_RECOVERYIMAGE_PARTITION_SIZE))
+  @echo -e ${CL_CYN}"Made recovery image: $@"${CL_RST}
+endef
 
-$(recovery_ramdisk): $(MKBOOTFS) $(MINIGZIP) \
+$(recovery_uncompressed_ramdisk): $(MKBOOTFS) \
 		$(INSTALLED_RAMDISK_TARGET) \
 		$(INSTALLED_BOOTIMAGE_TARGET) \
 		$(INTERNAL_RECOVERYIMAGE_FILES) \
@@ -1012,10 +1017,19 @@ $(recovery_ramdisk): $(MKBOOTFS) $(MINIGZIP) \
 		$(recovery_build_prop) $(recovery_resource_deps) $(recovery_root_deps) \
 		$(recovery_fstab) \
 		$(RECOVERY_INSTALL_OTA_KEYS)
+	$(call build-recoveryramdisk)
+	@echo -e ${CL_CYN}"----- Making uncompressed recovery ramdisk ------"${CL_RST}
+	$(hide) $(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) > $@
+
+$(recovery_ramdisk): $(MINIGZIP) \
+		$(recovery_uncompressed_ramdisk)
+	@echo -e ${CL_CYN}"----- Making compressed recovery ramdisk ------"${CL_RST}
+	$(hide) $(MINIGZIP) < $(recovery_uncompressed_ramdisk) > $@
 
 ifndef BOARD_CUSTOM_BOOTIMG_MK
 $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) $(recovery_ramdisk) $(recovery_kernel) \
 		$(RECOVERYIMAGE_EXTRA_DEPS)
+	@echo -e ${CL_CYN}"----- Making recovery image ------"${CL_RST}
 	$(call build-recoveryimage-target, $@)
 endif # BOARD_CUSTOM_BOOTIMG_MK
 
@@ -1091,6 +1105,9 @@ $(RECOVERY_RESOURCE_ZIP): $(INSTALLED_RECOVERYIMAGE_TARGET)
 .PHONY: recoveryimage-nodeps
 recoveryimage-nodeps:
 	@echo "make $@: ignoring dependencies"
+	$(call build-recoveryramdisk)
+	$(hide) $(MKBOOTFS) $(TARGET_RECOVERY_ROOT_OUT) > $(recovery_uncompressed_ramdisk)
+	$(hide) $(MINIGZIP) < $(recovery_uncompressed_ramdisk) > $(recovery_ramdisk)
 	$(call build-recoveryimage-target, $(INSTALLED_RECOVERYIMAGE_TARGET))
 
 else
