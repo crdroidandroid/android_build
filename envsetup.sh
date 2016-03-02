@@ -902,8 +902,15 @@ function mmm()
         local ARGS=
         local DIR TO_CHOP
         local GET_INSTALL_PATH=
-        local DASH_ARGS=$(echo "$@" | awk -v RS=" " -v ORS=" " '/^-.*$/')
-        local DIRS=$(echo "$@" | awk -v RS=" " -v ORS=" " '/^[^-].*$/')
+
+        if [ "$(__detect_shell)" = "zsh" ]; then
+            set -lA DASH_ARGS $(echo "$@" | awk -v RS=" " -v ORS=" " '/^-.*$/')
+            set -lA DIRS $(echo "$@" | awk -v RS=" " -v ORS=" " '/^[^-].*$/')
+        else
+            local DASH_ARGS=$(echo "$@" | awk -v RS=" " -v ORS=" " '/^-.*$/')
+            local DIRS=$(echo "$@" | awk -v RS=" " -v ORS=" " '/^[^-].*$/')
+        fi
+
         for DIR in $DIRS ; do
             MODULES=`echo $DIR | sed -n -e 's/.*:\(.*$\)/\1/p' | sed 's/,/ /'`
             if [ "$MODULES" = "" ]; then
@@ -966,8 +973,13 @@ function mmma()
   local T=$(gettop)
   local DRV=$(getdriver $T)
   if [ "$T" ]; then
-    local DASH_ARGS=$(echo "$@" | awk -v RS=" " -v ORS=" " '/^-.*$/')
-    local DIRS=$(echo "$@" | awk -v RS=" " -v ORS=" " '/^[^-].*$/')
+    if [ "$(__detect_shell)" = "zsh" ]; then
+        set -lA DASH_ARGS $(echo "$@" | awk -v RS=" " -v ORS=" " '/^-.*$/')
+        set -lA DIRS $(echo "$@" | awk -v RS=" " -v ORS=" " '/^[^-].*$/')
+    else
+        local DASH_ARGS=$(echo "$@" | awk -v RS=" " -v ORS=" " '/^-.*$/')
+        local DIRS=$(echo "$@" | awk -v RS=" " -v ORS=" " '/^[^-].*$/')
+    fi
     local MY_PWD=`PWD= /bin/pwd`
     if [ "$MY_PWD" = "$T" ]; then
       MY_PWD=
@@ -1821,7 +1833,7 @@ function makerecipe() {
 
   repo forall -c '
 
-  if [ "$REPO_REMOTE" == "github" ]
+  if [ "$REPO_REMOTE" = "github" ]
   then
     pwd
     cmremote
@@ -1832,7 +1844,7 @@ function makerecipe() {
 
 function cmgerrit() {
 
-    if [ "$(__detect_shell)" == "zsh" ]; then
+    if [ "$(__detect_shell)" = "zsh" ]; then
         # zsh does not define FUNCNAME, derive from funcstack
         local FUNCNAME=$funcstack[1]
     fi
