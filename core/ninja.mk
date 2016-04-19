@@ -1,6 +1,6 @@
 NINJA ?= $(shell which ninja)
 ifeq ($(NINJA),)
-  NINJA := prebuilts/ninja/$(HOST_PREBUILT_TAG)/ninja
+  NINJA := prebuilts/build-tools/$(HOST_PREBUILT_TAG)/bin/ninja
 endif
 
 ifeq ($(USE_SOONG),true)
