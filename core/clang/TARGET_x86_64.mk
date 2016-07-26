@@ -59,7 +59,7 @@ CLANG_TARGET_GLOBAL_LDFLAGS := \
   $(call convert-to-clang-flags,$(TARGET_GLOBAL_LDFLAGS)) \
   $(CLANG_CONFIG_x86_64_TARGET_EXTRA_LDFLAGS)
 
-RS_TRIPLE := aarch64-linux-android
+RS_TRIPLE := renderscript64-linux-android
 RS_TRIPLE_CFLAGS := -D__x86_64__
 RS_COMPAT_TRIPLE := x86_64-linux-android
 
