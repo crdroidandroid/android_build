@@ -25,6 +25,7 @@ GRANDFATHERED_ALL_PREBUILT := \
 	bmgr \
 	ime \
 	input \
+	kernel \
 	monkey \
 	pm \
 	RFFspeed_501.bmd \
