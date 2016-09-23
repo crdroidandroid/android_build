@@ -3,8 +3,6 @@
 print_build_config_vars := \
   PLATFORM_VERSION_CODENAME \
   PLATFORM_VERSION \
-  CM_VERSION \
-  TARGET_PRODUCT \
   TARGET_BUILD_VARIANT \
   TARGET_BUILD_TYPE \
   TARGET_BUILD_APPS \
@@ -126,6 +124,8 @@ endif # CALLED_FROM_SETUP
 
 ifneq ($(PRINT_BUILD_CONFIG),)
 $(info ============================================)
+$(info   CRDROID_VERSION=$(CM_VERSION))
+$(info   CRDROID_DEVICE=$(CM_BUILD))
 $(foreach v, $(print_build_config_vars),\
   $(info $v=$($(v))))
 $(info ============================================)
