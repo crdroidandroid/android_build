@@ -72,6 +72,18 @@ CLANG_CONFIG_UNKNOWN_CFLAGS := \
   -fno-tree-sra \
   -fprefetch-loop-arrays \
   -funswitch-loops \
+  -fgcse-after-reload \
+  -fgcse-las \
+  -fgcse-sm \
+  -fvect-cost-model \
+  -fgcse-after-reload \
+  -fivopts \
+  -fweb \
+  -ftracer \
+  -funsafe-loop-optimizations \
+  -funswitch-loops \
+  -frename-registers \
+  -fvect-cost-model \
   -Werror=unused-but-set-parameter \
   -Werror=unused-but-set-variable \
   -Wmaybe-uninitialized \

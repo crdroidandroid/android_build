@@ -264,6 +264,7 @@ my_cppflags := $(my_cpp_std_version) $(my_cppflags)
 # Include DragonTC Optimizations
 ifneq ($(DISABLE_DTC_OPTS),true)
   include $(BUILD_SYSTEM)/dragontc.mk
+  include $(BUILD_SYSTEM)/crdroid_opts.mk
 endif
 
 ifeq ($(SDCLANG),true)

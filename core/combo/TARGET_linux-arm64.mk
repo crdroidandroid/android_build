@@ -117,7 +117,6 @@ TARGET_GLOBAL_LDFLAGS += \
 			-Wl,--fix-cortex-a53-843419 \
 			-fuse-ld=gold \
 			-Wl,--icf=safe \
-			-Wl,--no-undefined-version \
 			$(arch_variant_ldflags)
 
 # Disable transitive dependency library symbol resolving.
@@ -128,11 +127,16 @@ TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden
 # More flags/options can be added here
 TARGET_RELEASE_CFLAGS := \
 			-DNDEBUG \
-			-O2 -g0 \
+			-g0 \
 			-Wstrict-aliasing=2 \
 			-fgcse-after-reload \
 			-frerun-cse-after-loop \
 			-frename-registers
+
+# Disable warnings and debug
+TARGET_GLOBAL_CFLAGS += -w -g0
+TARGET_GLOBAL_LDFLAGS += -w -g0
+TARGET_GLOBAL_CPPFLAGS += -w -g0
 
 libc_root := bionic/libc
 libm_root := bionic/libm
