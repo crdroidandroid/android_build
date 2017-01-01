@@ -1,4 +1,10 @@
 # Put some miscellaneous rules here
+# Colors
+RED="\033[31m"
+GRN="\033[32m"
+YLW="\033[33m"
+BLU="\033[34m"
+NC='\033[0m'
 
 # HACK: clear LOCAL_PATH from including last build target before calling
 # intermedites-dir-for
@@ -2235,6 +2241,34 @@ CM_TARGET_PACKAGE := $(PRODUCT_OUT)/$(CM_VERSION).zip
 .PHONY: otapackage bacon
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
+	echo -e ${GRN}"           ###########             "
+	echo -e ${YLW}"         ################          "
+	echo -e ${RED}"       ########    ########        "
+	echo -e ${GRN}"  #########        ##########      "
+	echo -e ${BLU}"  #######     ########    #######  "
+	echo -e ${YLW}"  #####   ##############     ####  "
+	echo -e ${RED}"       #####################       "
+	echo -e ${RED}"    ########   ######   #####      "
+	echo -e ${RED}"  #######       ####      #######  "
+	echo -e ${RED}"  #####         ####        ###### "
+	echo -e ${RED}"  #######                 #####    "
+	echo -e ${RED}"     ######             #####      "
+	echo -e ${RED}"        ########    ########       "
+	echo -e ${RED}"           #################       "
+	echo -e ${RED}"             ########## ##         "
+	echo -e ${YLW}"                     ##  ##        "
+	echo -e ${YLW}"   ####             ###  ##        "
+	echo -e ${YLW}"  ######           ###   ###       "
+	echo -e ${YLW}" #######          ###  ######      "
+	echo -e ${YLW}" ## ####         ###   #######     "
+	echo -e ${BLU}" ##  ###        ###    ######      "
+	echo -e ${BLU}" ##            ###     ######      "
+	echo -e ${GRN}" ##          ####      #####       "
+	echo -e ${YLW}" ###        ####       ####        "
+	echo -e ${BLU}"  ###     #####        ####        "
+	echo -e ${BLU}"  ###########          ###         "
+	echo -e ${BLU}"   ########            ##          "
+	echo -e ${YLW}"     ####              #     ${NC} "
 	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(CM_TARGET_PACKAGE)
 	$(hide) $(MD5SUM) $(CM_TARGET_PACKAGE) > $(CM_TARGET_PACKAGE).md5sum
 	@echo "Package Complete: $(CM_TARGET_PACKAGE)"
@@ -2585,3 +2619,4 @@ include $(BUILD_SYSTEM)/product-graph.mk
 ifneq ($(sdk_repo_goal),)
 include $(TOPDIR)development/build/tools/sdk_repo.mk
 endif
+
