@@ -1283,6 +1283,12 @@ define create-system-vendor-symlink
 endef
 endif
 
+# Create bash symlink to sh
+define create-bash-sh-symlink
+  $(hide) rm $(TARGET_OUT)/bin/sh
+  $(hide) ln -sf /system/xbin/bash $(TARGET_OUT)/bin/sh
+endef
+
 # Only Create symlink /system/vendor to /vendor if necessary.
 ifdef BOARD_NEEDS_VENDORIMAGE_SYMLINK
 define create-system-vendor-symlink
@@ -1298,6 +1304,7 @@ endif
 # $(1): output file
 define build-systemimage-target
   @echo "Target system fs image: $(1)"
+  $(call create-bash-sh-symlink)
   $(call create-system-vendor-symlink)
   @mkdir -p $(dir $(1)) $(systemimage_intermediates) && rm -rf $(systemimage_intermediates)/system_image_info.txt
   $(call generate-userimage-prop-dictionary, $(systemimage_intermediates)/system_image_info.txt, \
