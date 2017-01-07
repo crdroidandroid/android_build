@@ -682,7 +682,7 @@ $(error bailing...)
 endif
 
 # These can be changed to modify both host and device modules.
-COMMON_GLOBAL_CFLAGS:= -DANDROID -fmessage-length=0 -W -Wall -Wno-unused -Winit-self -Wpointer-arith
+COMMON_GLOBAL_CFLAGS:= -DANDROID -fmessage-length=0 -W -Wall -Wno-unused -Winit-self -Wpointer-arith -Wno-address-of-packed-member -Wno-main -Wno-instantiation-after-specialization -Wno-max-unsigned-zero
 COMMON_RELEASE_CFLAGS:= -DNDEBUG -UDEBUG
 
 # Force gcc to always output color diagnostics.  Ninja will strip the ANSI
