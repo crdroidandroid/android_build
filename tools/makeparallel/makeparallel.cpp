@@ -323,13 +323,17 @@ int main(int argc, char* argv[]) {
       // ninja is parallel by default, pass -j1 to disable parallelism if make wasn't parallel
       args.push_back(strdup("-j1"));
     } else if (tokens > 0) {
-      args.push_back(strdup(jarg.c_str()));
+      if (jarg != "") {
+        args.push_back(strdup(jarg.c_str()));
+      }
     }
     if (keep_going) {
       args.push_back(strdup("-k0"));
     }
   } else {
-    args.push_back(strdup(jarg.c_str()));
+    if (jarg != "") {
+      args.push_back(strdup(jarg.c_str()));
+    }
   }
 
   args.insert(args.end(), &argv[2], &argv[argc]);
