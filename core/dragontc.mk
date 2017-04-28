@@ -20,8 +20,8 @@ BLUETOOTH := libbluetooth_jni bluetooth.mapsapi bluetooth.default bluetooth.maps
 #######################
 
 # DTC module disable by version
-DISABLE_DTC_arm :=
-DISABLE_DTC_arm64 := libm librsjni libblasV8 libF77blasV8 libF77blas libRSSupport% libc libclcore libart libart-compiler libsigchain dalvikvm dex2oat dexdump libLLVMCodeGen libdng_sdk libdng% libbnnmlowpV8 libLLVMARMCodeGen libLLVMAArch64CodeGen libjni_filtershow_filters busybox libLLVMAnalysis libLLVM% libsqlite bcc libcompiler_rt-extras
+DISABLE_DTC_arm := libm librsjni libblasV8 libF77blasV8 libF77blas libRSSupport% libc libclcore libart libart-compiler libsigchain dalvikvm dex2oat dexdump libLLVMCodeGen libdng_sdk libdng% libbnnmlowpV8 libLLVMARMCodeGen libLLVMAArch64CodeGen libjni_filtershow_filters busybox libLLVMAnalysis libLLVM% libsqlite bcc libcompiler_rt-extras libntfs% libssh% libjni_snap% libavcodec libswresample libswscale 7z
+DISABLE_DTC_arm64 := libm librsjni libblasV8 libF77blasV8 libF77blas libRSSupport% libc libclcore libart libart-compiler libsigchain dalvikvm dex2oat dexdump libLLVMCodeGen libdng_sdk libdng% libbnnmlowpV8 libLLVMARMCodeGen libLLVMAArch64CodeGen libjni_filtershow_filters busybox libLLVMAnalysis libLLVM% libsqlite bcc libcompiler_rt-extras libntfs% libssh% libjni_snap% libavcodec libswresample libswscale 7z
 
 # Set DISABLE_DTC based on arch
 DISABLE_DTC := \
@@ -82,7 +82,41 @@ POLLY := -O3 -mllvm -polly \
 # Disable modules that dont work with Polly. Split up by arch.
 DISABLE_POLLY_arm := \
   libjpeg_static \
-  libicuuc
+  libicuuc \
+  libwebp-decode \
+  libwebp-encode \
+  libpdfiumfxge \
+  libskia_static \
+  libaudioutils \
+  libpdfium% \
+  libLLVMSupport \
+  libsvoxpico \
+  libRS_internal \
+  libvpx \
+  libopus \
+  libv8 \
+  libsonic \
+  libaudioflinger \
+  libstagefright% \
+  libart \
+  libFFTEm \
+  libRSCpuRef \
+  libbnnmlowp \
+  libmedia_jni \
+  libFraunhoferAAC \
+  libavcdec \
+  libavcenc \
+  libmpeg2dec \
+  libwebrtc% \
+  libmusicbundle \
+  libreverb \
+  libscrypt_static \
+  libmpeg2dec \
+  libcrypto_static \
+  libcrypto \
+  libyuv% \
+  libjni_gallery_filters \
+  libLLVMSelectionDAG
 
 DISABLE_POLLY_arm64 := \
   libjpeg_static \
