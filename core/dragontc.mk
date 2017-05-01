@@ -20,8 +20,8 @@ BLUETOOTH := libbluetooth_jni bluetooth.mapsapi bluetooth.default bluetooth.maps
 #######################
 
 # DTC module disable by version
-DISABLE_DTC_arm := libm librsjni libblasV8 libF77blasV8 libF77blas libRSSupport% libc libclcore libart libart-compiler libsigchain dalvikvm dex2oat dexdump libLLVMCodeGen libdng_sdk libdng% libbnnmlowpV8 libLLVMARMCodeGen libLLVMAArch64CodeGen libjni_filtershow_filters busybox libLLVMAnalysis libLLVM% libsqlite bcc libcompiler_rt-extras libntfs% libssh% libjni_snap% libavcodec libswresample libswscale 7z
-DISABLE_DTC_arm64 := libm librsjni libblasV8 libF77blasV8 libF77blas libRSSupport% libc libclcore libart libart-compiler libsigchain dalvikvm dex2oat dexdump libLLVMCodeGen libdng_sdk libdng% libbnnmlowpV8 libLLVMARMCodeGen libLLVMAArch64CodeGen libjni_filtershow_filters busybox libLLVMAnalysis libLLVM% libsqlite bcc libcompiler_rt-extras libntfs% libssh% libjni_snap% libavcodec libswresample libswscale 7z
+DISABLE_DTC_arm := libm librsjni libblasV8 libF77blasV8 libF77blas libRSSupport% libc libclcore libart libart-compiler libsigchain dalvikvm dex2oat dexdump libLLVMCodeGen libdng_sdk libdng% libbnnmlowpV8 libLLVMARMCodeGen libLLVMAArch64CodeGen libjni_filtershow_filters busybox libLLVMAnalysis libLLVM% libsqlite bcc libcompiler_rt-extras libntfs% libssh% libjni_snap% libavcodec libswresample libswscale libagl libGLE% ipacm
+DISABLE_DTC_arm64 := libm librsjni libblasV8 libF77blasV8 libF77blas libRSSupport% libc libclcore libart libart-compiler libsigchain dalvikvm dex2oat dexdump libLLVMCodeGen libdng_sdk libdng% libbnnmlowpV8 libLLVMARMCodeGen libLLVMAArch64CodeGen libjni_filtershow_filters busybox libLLVMAnalysis libLLVM% libsqlite bcc libcompiler_rt-extras libntfs% libssh% libjni_snap% libavcodec libswresample libswscale libagl libGLE% ipacm
 
 # Set DISABLE_DTC based on arch
 DISABLE_DTC := \
