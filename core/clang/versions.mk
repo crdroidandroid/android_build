@@ -1,5 +1,9 @@
 ## Clang/LLVM release versions.
 
 LLVM_RELEASE_VERSION := $(DRAGONTC_VERSION)
+ifneq ($(DISABLE_DTC_OPTS),true)
 LLVM_PREBUILTS_VERSION ?= $(DRAGONTC_VERSION)
+else
+LLVM_PREBUILTS_VERSION ?= clang-2690385
+endif
 LLVM_PREBUILTS_BASE ?= prebuilts/clang/host
