@@ -133,10 +133,17 @@ TARGET_RELEASE_CFLAGS := \
 			-frerun-cse-after-loop \
 			-frename-registers
 
+ifneq ($(DISABLE_DTC_OPTS),true)
 # Disable warnings and debug
 TARGET_GLOBAL_CFLAGS += -w -g0
 TARGET_GLOBAL_LDFLAGS += -w -g0
 TARGET_GLOBAL_CPPFLAGS += -w -g0
+else
+TARGET_GLOBAL_LDFLAGS += \
+			-Wl,--no-undefined-version
+TARGET_RELEASE_CFLAGS += \
+			-O2
+endif
 
 libc_root := bionic/libc
 libm_root := bionic/libm

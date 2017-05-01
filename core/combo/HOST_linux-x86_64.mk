@@ -36,6 +36,10 @@ HOST_TOOLCHAIN_FOR_CLANG := prebuilts/gcc/linux-x86/host/x86_64-linux-glibc2.15-
 HOST_GLOBAL_CFLAGS += -m64 -Wa,--noexecstack
 HOST_GLOBAL_LDFLAGS += -m64 -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now
 
+ifeq ($(DISABLE_DTC_OPTS),true)
+HOST_GLOBAL_LDFLAGS += -Wl,--no-undefined-version
+endif
+
 ifneq ($(strip $(BUILD_HOST_static)),)
 # Statically-linked binaries are desirable for sandboxed environment
 HOST_GLOBAL_LDFLAGS += -static

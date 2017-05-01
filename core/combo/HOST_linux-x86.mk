@@ -37,6 +37,10 @@ $(combo_2nd_arch_prefix)HOST_TOOLCHAIN_FOR_CLANG := prebuilts/gcc/linux-x86/host
 $(combo_2nd_arch_prefix)HOST_GLOBAL_CFLAGS += -msse3 -mfpmath=sse -m32 -Wa,--noexecstack -march=native
 $(combo_2nd_arch_prefix)HOST_GLOBAL_LDFLAGS += -m32 -Wl,-z,noexecstack -Wl,-z,relro -Wl,-z,now
 
+ifeq ($(DISABLE_DTC_OPTS),true)
+$(combo_2nd_arch_prefix)HOST_GLOBAL_LDFLAGS += -Wl,--no-undefined-version
+endif
+
 ifneq ($(strip $(BUILD_HOST_static)),)
 # Statically-linked binaries are desirable for sandboxed environment
 $(combo_2nd_arch_prefix)HOST_GLOBAL_LDFLAGS += -static

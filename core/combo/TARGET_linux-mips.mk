@@ -110,6 +110,11 @@ $(combo_2nd_arch_prefix)TARGET_GLOBAL_LDFLAGS += \
 			-Wl,--fatal-warnings \
 			$(arch_variant_ldflags)
 
+ifeq ($(DISABLE_DTC_OPTS),true)
+$(combo_2nd_arch_prefix)TARGET_GLOBAL_LDFLAGS += \
+			-Wl,--no-undefined-version
+endif
+
 # Disable transitive dependency library symbol resolving.
 $(combo_2nd_arch_prefix)TARGET_GLOBAL_LDFLAGS += -Wl,--allow-shlib-undefined
 

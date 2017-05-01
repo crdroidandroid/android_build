@@ -139,6 +139,16 @@ $(combo_2nd_arch_prefix)TARGET_GLOBAL_LDFLAGS += \
 			-Wl,--hash-style=gnu \
 			$(arch_variant_ldflags)
 
+ifeq ($(DISABLE_DTC_OPTS),true)
+$(combo_2nd_arch_prefix)TARGET_arm_CFLAGS += \
+                        -O2
+$(combo_2nd_arch_prefix)TARGET_thumb_CFLAGS += \
+                        -Os
+$(combo_2nd_arch_prefix)TARGET_GLOBAL_LDFLAGS += \
+			-Wl,--no-undefined-version
+endif
+
+
 $(combo_2nd_arch_prefix)TARGET_GLOBAL_CFLAGS += -mthumb-interwork
 
 $(combo_2nd_arch_prefix)TARGET_GLOBAL_CPPFLAGS += -fvisibility-inlines-hidden

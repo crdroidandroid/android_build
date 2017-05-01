@@ -34,9 +34,15 @@ $(combo_var_prefix)AR := $(AR)
 $(combo_var_prefix)STRIP := $(STRIP)
 
 $(combo_var_prefix)GLOBAL_CFLAGS := -fno-exceptions -Wno-multichar $(BOARD_GLOBAL_CFLAGS)
+ifneq ($(DISABLE_DTC_OPTS),true)
 $(combo_var_prefix)RELEASE_CFLAGS := -g0 $(BOARD_RELEASE_CFLAGS)
 $(combo_var_prefix)GLOBAL_CPPFLAGS := -w -g0 $(BOARD_GLOBAL_CPPFLAGS)
 $(combo_var_prefix)GLOBAL_LDFLAGS := -w -g0
+else
+$(combo_var_prefix)RELEASE_CFLAGS := -O2 -g -fno-strict-aliasing $(BOARD_RELEASE_CFLAGS)
+$(combo_var_prefix)GLOBAL_CPPFLAGS := $(BOARD_GLOBAL_CPPFLAGS)
+$(combo_var_prefix)GLOBAL_LDFLAGS :=
+endif
 $(combo_var_prefix)GLOBAL_ARFLAGS := crsPD
 $(combo_var_prefix)GLOBAL_LD_DIRS :=
 
