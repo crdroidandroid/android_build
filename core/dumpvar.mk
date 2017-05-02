@@ -21,7 +21,8 @@ print_build_config_vars := \
   HOST_CROSS_2ND_ARCH \
   HOST_BUILD_TYPE \
   BUILD_ID \
-  OUT_DIR
+  OUT_DIR \
+  CRDROID_OPTIMIZATIONS
 
 ifneq ($(RECOVERY_VARIANT),)
 print_build_config_vars += \
