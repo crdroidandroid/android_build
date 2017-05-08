@@ -22,7 +22,8 @@ print_build_config_vars := \
   HOST_BUILD_TYPE \
   BUILD_ID \
   OUT_DIR \
-  CRDROID_OPTIMIZATIONS
+  CRDROID_OPTIMIZATIONS \
+  DRAGONTC_VERSION
 
 ifneq ($(RECOVERY_VARIANT),)
 print_build_config_vars += \
