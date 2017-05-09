@@ -33,6 +33,27 @@ $(combo_var_prefix)CXX := $(CXX)
 $(combo_var_prefix)AR := $(AR)
 $(combo_var_prefix)STRIP := $(STRIP)
 
+# crDroid build
+ifeq ($(CRDROID_OPTIMIZATIONS),true)
+    # DragonTC info
+    DRAGONTC_VERSION := 5.0
+    DISABLE_DTC_OPTS := false
+
+    TARGET_GCC_VERSION_EXP := 6.3
+    TARGET_LINARO_KERNEL := $(TARGET_GCC_VERSION_KERNEL)
+
+    # Find host os
+    UNAME := $(shell uname -s)
+    HOST_OS := linux
+
+    # Add extra libs for the compilers to use
+    export LD_LIBRARY_PATH := $(TARGET_ARCH_LIB_PATH):$(LD_LIBRARY_PATH)
+    export LIBRARY_PATH := $(TARGET_ARCH_LIB_PATH):$(LIBRARY_PATH)
+else
+    DRAGONTC_VERSION := 3.8
+    DISABLE_DTC_OPTS := true
+endif
+
 $(combo_var_prefix)GLOBAL_CFLAGS := -fno-exceptions -Wno-multichar $(BOARD_GLOBAL_CFLAGS)
 ifneq ($(DISABLE_DTC_OPTS),true)
 $(combo_var_prefix)RELEASE_CFLAGS := -g0 $(BOARD_RELEASE_CFLAGS)

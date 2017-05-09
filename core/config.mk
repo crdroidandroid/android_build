@@ -669,27 +669,6 @@ include vendor/cm/build/core/qcom_target.mk
 # Rules for MTK targets
 include vendor/cm/build/core/mtk_target.mk
 
-# crDroid build
-ifeq ($(CRDROID_OPTIMIZATIONS),true)
-    # DragonTC info
-    DRAGONTC_VERSION := 5.0
-    DISABLE_DTC_OPTS := false
-
-    TARGET_GCC_VERSION_EXP := 6.3
-    TARGET_LINARO_KERNEL := $(TARGET_GCC_VERSION_KERNEL)
-
-    # Find host os
-    UNAME := $(shell uname -s)
-    HOST_OS := linux
-
-    # Add extra libs for the compilers to use
-    export LD_LIBRARY_PATH := $(TARGET_ARCH_LIB_PATH):$(LD_LIBRARY_PATH)
-    export LIBRARY_PATH := $(TARGET_ARCH_LIB_PATH):$(LIBRARY_PATH)
-else
-    DRAGONTC_VERSION := 3.8
-    DISABLE_DTC_OPTS := true
-endif
-
 # ###############################################################
 # Set up final options.
 # ###############################################################
