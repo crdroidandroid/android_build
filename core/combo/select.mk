@@ -39,8 +39,9 @@ ifeq ($(CRDROID_OPTIMIZATIONS),true)
     DRAGONTC_VERSION := 5.0
     DISABLE_DTC_OPTS := false
 
+ifeq ($(TARGET_ARCH),arm)
     TARGET_GCC_VERSION_EXP := 6.3
-    TARGET_LINARO_KERNEL := $(TARGET_GCC_VERSION_KERNEL)
+endif
 
     # Find host os
     UNAME := $(shell uname -s)
