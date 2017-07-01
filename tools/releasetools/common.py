@@ -387,7 +387,7 @@ class BuildInfo(object):
 
   _RO_PRODUCT_RESOLVE_PROPS = ["ro.product.brand", "ro.product.device",
                                "ro.product.manufacturer", "ro.product.model",
-                               "ro.product.name"]
+                               "ro.product.name", "ro.crdroid.build.version"]
   _RO_PRODUCT_PROPS_DEFAULT_SOURCE_ORDER_CURRENT = [
       "product", "odm", "vendor", "system_ext", "system"]
   _RO_PRODUCT_PROPS_DEFAULT_SOURCE_ORDER_ANDROID_10 = [
