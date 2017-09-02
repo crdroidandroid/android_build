@@ -75,7 +75,6 @@ PRODUCT_PACKAGES += \
     e2fsck \
     resize2fs \
     tune2fs \
-    nullwebview \
     screencap \
     sensorservice \
     uiautomator \
