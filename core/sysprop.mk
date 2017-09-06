@@ -218,7 +218,7 @@ BUILD_THUMBPRINT :=
 #
 
 # BUILD_ID: detail info; has the same info as the build fingerprint
-BUILD_DESC := $(TARGET_PRODUCT)-$(TARGET_BUILD_VARIANT) $(PLATFORM_VERSION) $(BUILD_ID) $(BUILD_NUMBER_FROM_FILE) $(BUILD_VERSION_TAGS)
+BUILD_DESC := $(BUILD_ID)
 
 # BUILD_DISPLAY_ID is shown under Settings -> About Phone
 ifeq ($(TARGET_BUILD_VARIANT),user)
