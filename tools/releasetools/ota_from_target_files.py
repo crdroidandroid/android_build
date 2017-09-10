@@ -210,7 +210,7 @@ def AppendAssertions(script, info_dict, oem_dicts=None):
       device = GetBuildProp("ro.product.device", info_dict)
     else:
       device = OPTIONS.override_device
-    script.AssertDevice(device)
+    #script.AssertDevice(device)
   else:
     if not oem_dicts:
       raise common.ExternalError(
