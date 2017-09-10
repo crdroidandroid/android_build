@@ -32,7 +32,6 @@ PRODUCT_PACKAGES += \
     CertInstaller \
     Contacts \
     DeskClock \
-    DocumentsUI \
     DownloadProviderUi \
     Email \
     ExactCalculator \
@@ -50,7 +49,6 @@ PRODUCT_PACKAGES += \
     PrintSpooler \
     PrintRecommendationService \
     ProxyHandler \
-    QuickSearchBox \
     Settings \
     SharedStorageBackup \
     StorageManager \
