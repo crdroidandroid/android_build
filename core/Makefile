@@ -1271,6 +1271,9 @@ define build-recoveryimage-target
     $(hide) $(call assert-max-image-size,$(1),$(BOARD_BOOTIMAGE_PARTITION_SIZE)), \
     $(hide) $(call assert-max-image-size,$(1),$(BOARD_RECOVERYIMAGE_PARTITION_SIZE)))
   @echo ----- Made recovery image: $(1) --------
+  @echo ----- Generating Changelog ----- 
+  $(hide) ./vendor/lineage/build/tools/changelog.sh
+  $(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/changelog_$(TARGET_DEVICE).txt
 endef
 
 ifeq ($(BOARD_USES_RECOVERY_AS_BOOT),true)
