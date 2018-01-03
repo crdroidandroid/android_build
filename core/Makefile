@@ -1165,10 +1165,6 @@ else
 RECOVERY_RESOURCE_ZIP :=
 endif
 
-ifeq ($(TARGET_PRIVATE_RES_DIRS),)
-  $(info No private recovery resources for TARGET_DEVICE $(TARGET_DEVICE))
-endif
-
 ifeq ($(recovery_fstab),)
   $(info No recovery.fstab for TARGET_DEVICE $(TARGET_DEVICE))
 endif
@@ -1491,6 +1487,15 @@ endef
 
 $(BUILT_SYSTEMIMAGE): $(FULL_SYSTEMIMAGE_DEPS) $(INSTALLED_FILES_FILE) $(BUILD_IMAGE_SRCS)
 	$(call build-systemimage-target,$@)
+
+ifndef I_WANT_A_QUAIL_STAR
+ifneq ($(WITHOUT_CHECK_API),true)
+$(BUILT_SYSTEMIMAGE): checkapi
+ifneq ($(TARGET_DISABLE_LINEAGE_SDK), true)
+$(BUILT_SYSTEMIMAGE): checkapi-lineage
+endif
+endif
+endif
 
 INSTALLED_SYSTEMIMAGE := $(PRODUCT_OUT)/system.img
 SYSTEMIMAGE_SOURCE_DIR := $(TARGET_OUT)
