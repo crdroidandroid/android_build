@@ -280,6 +280,15 @@ endif # !enable_target_debugging
 
 ## eng ##
 
+## Uncomment below to debug with adb on boot
+#ADDITIONAL_DEFAULT_PROPERTIES += persist.service.adb.enable=1
+#ADDITIONAL_DEFAULT_PROPERTIES += persist.service.debuggable=1
+#ADDITIONAL_DEFAULT_PROPERTIES += persist.sys.usb.config=mtp,adb
+#ADDITIONAL_DEFAULT_PROPERTIES += ro.adb.secure=0
+#ADDITIONAL_DEFAULT_PROPERTIES += ro.secure=0
+#ADDITIONAL_DEFAULT_PROPERTIES += ro.debuggable=1
+#ADDITIONAL_DEFAULT_PROPERTIES += security.perf_harden=0
+
 ifeq ($(TARGET_BUILD_VARIANT),eng)
 tags_to_install := debug eng
 ifneq ($(filter ro.setupwizard.mode=ENABLED, $(call collapse-pairs, $(ADDITIONAL_BUILD_PROPERTIES))),)
