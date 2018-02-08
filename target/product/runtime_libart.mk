@@ -65,7 +65,7 @@ PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     dalvik.vm.dex2oat-Xms=64m \
     dalvik.vm.dex2oat-Xmx=512m \
     dalvik.vm.usejit=true \
-    dalvik.vm.usejitprofiles=true \
+    dalvik.vm.usejitprofiles=false \
     dalvik.vm.dexopt.secondary=true \
     dalvik.vm.appimageformat=lz4
 
@@ -89,8 +89,8 @@ endif
 # or if it is empty speed-profile is equivalent to (quicken + empty app image).
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     pm.dexopt.install=speed-profile \
-    pm.dexopt.bg-dexopt=speed-profile \
-    pm.dexopt.ab-ota=speed-profile \
+    pm.dexopt.bg-dexopt=speed \
+    pm.dexopt.ab-ota=speed \
     pm.dexopt.inactive=verify \
     pm.dexopt.shared=speed
 
