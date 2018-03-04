@@ -56,7 +56,7 @@ PRODUCT_PACKAGES += art-tools
 PRODUCT_PACKAGES += \
     cacerts \
 
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     dalvik.vm.image-dex2oat-Xms=64m \
     dalvik.vm.image-dex2oat-Xmx=64m \
     dalvik.vm.dex2oat-Xms=64m \
@@ -69,7 +69,7 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 
 # make "boot" reasons only extract for faster turnaround.
 
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     pm.dexopt.first-boot=extract \
     pm.dexopt.boot=extract \
     pm.dexopt.install=quicken \
