@@ -1230,7 +1230,9 @@ define transform-cpp-to-o-compiler-args
 	$(PRIVATE_CPPFLAGS) \
 	$(PRIVATE_DEBUG_CFLAGS) \
 	$(PRIVATE_CFLAGS_NO_OVERRIDE) \
-	$(PRIVATE_CPPFLAGS_NO_OVERRIDE)
+	$(PRIVATE_CPPFLAGS_NO_OVERRIDE) \
+	$(if $(findstring $(SDCLANG_PATH),$(PRIVATE_CXX)),$(SDCLANG_COMMON_FLAGS)) \
+	$(if $(findstring $(SDCLANG_PATH_2),$(PRIVATE_CXX)),$(SDCLANG_COMMON_FLAGS_2))
 endef
 
 define clang-tidy-cpp
@@ -1270,7 +1272,9 @@ define transform-c-or-s-to-o-compiler-args
 	    $(PRIVATE_TARGET_GLOBAL_CONLYFLAGS) \
 	    $(PRIVATE_ARM_CFLAGS) \
 	 ) \
-	 $(1)
+	 $(1) \
+	$(if $(findstring $(SDCLANG_PATH),$(PRIVATE_CC)),$(SDCLANG_COMMON_FLAGS)) \
+	$(if $(findstring $(SDCLANG_PATH_2),$(PRIVATE_CC)),$(SDCLANG_COMMON_FLAGS_2))
 endef
 
 define transform-c-to-o-compiler-args
