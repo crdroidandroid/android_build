@@ -444,7 +444,7 @@ def BuildImage(in_dir, prop_dict, out_file, target_out=None):
     build_command = [prop_dict["ext_mkuserimg"]]
     if "extfs_sparse_flag" in prop_dict:
       build_command.append(prop_dict["extfs_sparse_flag"])
-      run_fsck = True
+      #run_fsck = True
     build_command.extend([in_dir, out_file, fs_type,
                           prop_dict["mount_point"]])
     build_command.append(prop_dict["partition_size"])
@@ -779,8 +779,6 @@ def main(argv):
       mount_point = "system_other"
     elif image_filename == "userdata.img":
       mount_point = "data"
-    elif image_filename == "cache.img":
-      mount_point = "cache"
     elif image_filename == "vendor.img":
       mount_point = "vendor"
     elif image_filename == "oem.img":
