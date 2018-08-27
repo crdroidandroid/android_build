@@ -872,7 +872,7 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
     vendor_diff = common.BlockDifference("vendor", vendor_tgt)
     vendor_diff.WriteScript(script, output_zip)
 
-  AddCompatibilityArchiveIfTrebleEnabled(input_zip, output_zip, target_info)
+  # AddCompatibilityArchiveIfTrebleEnabled(input_zip, output_zip, target_info)
 
   common.CheckSize(boot_img.data, "boot.img", target_info)
   common.ZipWriteStr(output_zip, "boot.img", boot_img.data)
