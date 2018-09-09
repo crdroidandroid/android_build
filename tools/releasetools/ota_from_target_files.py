@@ -854,6 +854,28 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.Print(" /_/    \_\_| |_|\__,_|_|  \___/|_|\__,_|");
   script.Print("                                         ");
 
+  buildid = target_info.GetBuildProp("ro.modversion")
+  androidver = target_info.GetBuildProp("ro.build.version.release")
+  buildidn = target_info.GetBuildProp("ro.build.id")
+  buildday = target_info.GetBuildProp("ro.build.date")
+  securep = target_info.GetBuildProp("ro.build.version.security_patch")
+  device = target_info.GetBuildProp("ro.product.name")
+  manufacturer = target_info.GetBuildProp("ro.product.manufacturer")
+  script.Print("***********************************************");
+  script.Print(" ROM version      : %s"%(buildid));
+  script.Print("                                         ");
+  script.Print(" Android version  : %s"%(androidver));
+  script.Print("                                         ");
+  script.Print(" Security patch   : %s"%(securep));
+  script.Print("                                         ");
+  script.Print(" Build date       : %s"%(buildday));
+  script.Print("                                         ");
+  script.Print("***********************************************");
+  script.Print(" Device           : %s"%(device));
+  script.Print(" Manufacturer     : %s"%(manufacturer));
+  script.Print("***********************************************");
+  script.Print("                                         ");
+
   if OPTIONS.wipe_user_data:
     system_progress -= 0.1
   if HasVendorPartition(input_zip):
