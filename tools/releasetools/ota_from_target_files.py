@@ -511,13 +511,13 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.Print(" /_/    \_\_| |_|\__,_|_|  \___/|_|\__,_|");
   script.Print("                                         ");
 
-  buildid = target_info.GetBuildProp("ro.modversion")
-  androidver = target_info.GetBuildProp("ro.build.version.release")
-  buildidn = target_info.GetBuildProp("ro.build.id")
-  buildday = target_info.GetBuildProp("ro.build.date")
-  securep = target_info.GetBuildProp("ro.build.version.security_patch")
-  device = target_info.GetBuildProp("ro.product.name")
-  manufacturer = target_info.GetBuildProp("ro.product.manufacturer")
+  buildid = GetBuildProp("ro.modversion", OPTIONS.info_dict)
+  androidver = GetBuildProp("ro.build.version.release", OPTIONS.info_dict)
+  buildidn = GetBuildProp("ro.build.id", OPTIONS.info_dict)
+  buildday = GetBuildProp("ro.build.date", OPTIONS.info_dict)
+  securep = GetBuildProp("ro.build.version.security_patch", OPTIONS.info_dict)
+  device = GetBuildProp("ro.product.name", OPTIONS.info_dict)
+  manufacturer = GetBuildProp("ro.product.manufacturer", OPTIONS.info_dict)
   script.Print("***********************************************");
   script.Print(" ROM version      : %s"%(buildid));
   script.Print("                                         ");
