@@ -863,13 +863,9 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   manufacturer = target_info.GetBuildProp("ro.product.manufacturer")
   script.Print("***********************************************");
   script.Print(" ROM version      : %s"%(buildid));
-  script.Print("                                         ");
   script.Print(" Android version  : %s"%(androidver));
-  script.Print("                                         ");
   script.Print(" Security patch   : %s"%(securep));
-  script.Print("                                         ");
   script.Print(" Build date       : %s"%(buildday));
-  script.Print("                                         ");
   script.Print("***********************************************");
   script.Print(" Device           : %s"%(device));
   script.Print(" Manufacturer     : %s"%(manufacturer));
