@@ -835,37 +835,44 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   system_progress = 0.75
 
-  script.Print("                                         ");
-  script.Print("            _____            _     _     ");
-  script.Print("           |  __ \          (_)   | |    ");
-  script.Print("   ___ _ __| |  | |_ __ ___  _  __| |    ");
-  script.Print("  / __| '__| |  | | '__/ _ \| |/ _\`|    ");
-  script.Print(" | (__| |  | |__| | | | (_) | | (_| |    ");
-  script.Print("  \___|_|  |_____/|_|_ \___/|_|\__,_|  _ ");
-  script.Print("     /\             | |         (_)   | |");
-  script.Print("    /  \   _ __   __| |_ __ ___  _  __| |");
-  script.Print("   / /\ \ | '_ \ / _\`| '__/ _ \| |/ _\`|");
-  script.Print("  / ____ \| | | | (_| | | | (_) | | (_| |");
-  script.Print(" /_/    \_\_| |_|\__,_|_|  \___/|_|\__,_|");
-  script.Print("                                         ");
+  script.Print("                  ____             _     __ ");
+  script.Print("       __________/ __ \_________  (_)___/ / ");
+  script.Print("      / ___/ ___/ / / / ___/ __ \/ / __  /  ");
+  script.Print("     / /__/ /  / /_/ / /  / /_/ / / /_/ /   ");
+  script.Print("     \___/_/  /_____/_/   \____/_/\__,_/    ");
+  script.Print("     ___              __           _     __ ");
+  script.Print("    /   |  ____  ____/ /________  (_)___/ / ");
+  script.Print("   / /| | / __ \/ __  / ___/ __ \/ / __  /  ");
+  script.Print("  / ___ |/ / / / /_/ / /  / /_/ / / /_/ /   ");
+  script.Print(" /_/  |_/_/ /_/\__,_/_/   \____/_/\__,_/    ");
+  script.Print("                                            ");
 
-  buildid = target_info.GetBuildProp("ro.modversion")
-  androidver = target_info.GetBuildProp("ro.build.version.release")
-  buildidn = target_info.GetBuildProp("ro.build.id")
-  buildday = target_info.GetBuildProp("ro.build.date")
-  securep = target_info.GetBuildProp("ro.build.version.security_patch")
-  device = target_info.GetBuildProp("ro.product.name")
-  manufacturer = target_info.GetBuildProp("ro.product.manufacturer")
-  script.Print("***********************************************");
-  script.Print(" ROM version      : %s"%(buildid));
-  script.Print(" Android version  : %s"%(androidver));
-  script.Print(" Security patch   : %s"%(securep));
-  script.Print(" Build date       : %s"%(buildday));
-  script.Print("***********************************************");
-  script.Print(" Device           : %s"%(device));
-  script.Print(" Manufacturer     : %s"%(manufacturer));
-  script.Print("***********************************************");
-  script.Print("                                         ");
+  if GetBuildProp("ro.mod.version", OPTIONS.info_dict) is not None:
+    buildid = GetBuildProp("ro.mod.version", OPTIONS.info_dict)
+    androidver = GetBuildProp("ro.build.version.release", OPTIONS.info_dict)
+    buildtype = GetBuildProp("ro.build.type", OPTIONS.info_dict)
+    buildidn = GetBuildProp("ro.build.id", OPTIONS.info_dict)
+    buildday = GetBuildProp("ro.build.date", OPTIONS.info_dict)
+    securep = GetBuildProp("ro.build.version.security_patch", OPTIONS.info_dict)
+    buildhst = GetBuildProp("ro.build.host", OPTIONS.info_dict)
+    maintainer = GetBuildProp("ro.build.user", OPTIONS.info_dict)
+    device = GetBuildProp("ro.product.name", OPTIONS.info_dict)
+    codename = GetBuildProp("ro.vendor.product.device", OPTIONS.info_dict)
+    density = GetBuildProp("ro.sf.lcd_density", OPTIONS.info_dict)
+    script.Print(" =============================================");
+    script.Print(" crDroid Version  : %s"%(buildid));
+    script.Print(" Android Version  : %s"%(androidver));
+    script.Print(" Security Patch   : %s"%(securep));  
+    script.Print(" Build Date       : %s"%(buildday));
+    script.Print(" =============================================");
+    script.Print(" Build Type       : %s"%(buildtype));    
+    script.Print(" Build Host       : %s"%(buildhst));     
+    script.Print(" Maintainer       : %s"%(maintainer));   
+    script.Print(" =============================================");
+    script.Print(" Device           : %s"%(device));           
+    script.Print(" Codename         : %s"%(codename));       
+    script.Print(" LCD Density      : %s"%(density));   
+    script.Print(" =============================================");   
 
   if OPTIONS.wipe_user_data:
     system_progress -= 0.1
