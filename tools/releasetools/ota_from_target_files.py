@@ -857,13 +857,9 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   maintainer = target_info.GetBuildProp("ro.build.user")
   device = target_info.GetBuildProp("ro.product.name")
   codename = target_info.GetBuildProp("ro.lineage.device")
-  # Only works for my computer and dumpling(path)
-  #kernel = ("/home/killerdroid96/Github/CRD/out/target/product/dumpling/obj/KERNEL_OBJ/include/config/kernel.release")
-  #kernelver = open(kernel).read()
   script.Print(" ===============================================");
   script.Print(" Android Version  : %s"%(androidver));
   script.Print(" crDroid Version  : %s"%(buildid));
-  #script.Print(" Kernel Version   : %s"%(kernelver)); 
   script.Print(" Security Patch   : %s"%(securep));  
   script.Print(" Build Date       : %s"%(buildday));
   script.Print(" ===============================================");
