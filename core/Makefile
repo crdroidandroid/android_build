@@ -3178,7 +3178,19 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) \
 
 .PHONY: otapackage
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
-
+	
+	echo -e "                  ____             _     __ "
+	echo -e "       __________/ __ \_________  (_)___/ / "
+	echo -e "      / ___/ ___/ / / / ___/ __ \/ / __  /  "
+	echo -e "     / /__/ /  / /_/ / /  / /_/ / / /_/ /   "
+	echo -e "     \___/_/  /_____/_/   \____/_/\__,_/    "
+	echo -e "     ___              __           _     __ "
+	echo -e "    /   |  ____  ____/ /________  (_)___/ / "
+	echo -e "   / /| | / __ \/ __  / ___/ __ \/ / __  /  "
+	echo -e "  / ___ |/ / / / /_/ / /  / /_/ / / /_/ /   "
+	echo -e " /_/  |_/_/ /_/\__,_/_/   \____/_/\__,_/    "
+	echo -e "                                            "
+  
 endif    # build_ota_package
 
 # -----------------------------------------------------------------
