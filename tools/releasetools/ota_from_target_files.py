@@ -835,37 +835,40 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   system_progress = 0.75
 
-  script.Print("                                         ");
-  script.Print("            _____            _     _     ");
-  script.Print("           |  __ \          (_)   | |    ");
-  script.Print("   ___ _ __| |  | |_ __ ___  _  __| |    ");
-  script.Print("  / __| '__| |  | | '__/ _ \| |/ _\`|    ");
-  script.Print(" | (__| |  | |__| | | | (_) | | (_| |    ");
-  script.Print("  \___|_|  |_____/|_|_ \___/|_|\__,_|  _ ");
-  script.Print("     /\             | |         (_)   | |");
-  script.Print("    /  \   _ __   __| |_ __ ___  _  __| |");
-  script.Print("   / /\ \ | '_ \ / _\`| '__/ _ \| |/ _\`|");
-  script.Print("  / ____ \| | | | (_| | | | (_) | | (_| |");
-  script.Print(" /_/    \_\_| |_|\__,_|_|  \___/|_|\__,_|");
-  script.Print("                                         ");
+  script.Print("                  ____             _     __ ");
+  script.Print("       __________/ __ \_________  (_)___/ / ");
+  script.Print("      / ___/ ___/ / / / ___/ __ \/ / __  /  ");
+  script.Print("     / /__/ /  / /_/ / /  / /_/ / / /_/ /   ");
+  script.Print("     \___/_/  /_____/_/   \____/_/\__,_/    ");
+  script.Print("     ___              __           _     __ ");
+  script.Print("    /   |  ____  ____/ /________  (_)___/ / ");
+  script.Print("   / /| | / __ \/ __  / ___/ __ \/ / __  /  ");
+  script.Print("  / ___ |/ / / / /_/ / /  / /_/ / / /_/ /   ");
+  script.Print(" /_/  |_/_/ /_/\__,_/_/   \____/_/\__,_/    ");
+  script.Print("                                            ");
 
-  buildid = target_info.GetBuildProp("ro.modversion")
-  androidver = target_info.GetBuildProp("ro.build.version.release")
-  buildidn = target_info.GetBuildProp("ro.build.id")
+  androidver = target_info.GetBuildProp("ro.crdroid.version")
+  romid = target_info.GetBuildProp("ro.modversion")
   buildday = target_info.GetBuildProp("ro.build.date")
   securep = target_info.GetBuildProp("ro.build.version.security_patch")
-  device = target_info.GetBuildProp("ro.product.name")
   manufacturer = target_info.GetBuildProp("ro.product.manufacturer")
-  script.Print("***********************************************");
-  script.Print(" ROM version      : %s"%(buildid));
-  script.Print(" Android version  : %s"%(androidver));
-  script.Print(" Security patch   : %s"%(securep));
-  script.Print(" Build date       : %s"%(buildday));
-  script.Print("***********************************************");
-  script.Print(" Device           : %s"%(device));
+  device = target_info.GetBuildProp("ro.product.name")
+  codename = target_info.GetBuildProp("ro.lineage.device")
+  modem = target_info.GetBuildProp("ro.build.expect.modem")
+  firmware = target_info.GetBuildProp("ro.build.expect.firmware")
+  script.Print(" ===============================================");
+  script.Print(" crDroid Version  : %s"%(romid));
+  script.Print(" Security Patch   : %s"%(securep));  
+  script.Print(" Build Date       : %s"%(buildday));
+  script.Print(" ===============================================");
   script.Print(" Manufacturer     : %s"%(manufacturer));
-  script.Print("***********************************************");
-  script.Print("                                         ");
+  script.Print(" Device           : %s"%(device));           
+  script.Print(" Codename         : %s"%(codename));
+  script.Print(" ==============================================="); 
+  script.Print(" Android Version  : %s"%(androidver));
+  script.Print(" Firmware Version : %s"%(firmware)); 
+  script.Print(" Modem Version    : %s"%(modem)); 
+  script.Print(" ===============================================");
 
   if OPTIONS.wipe_user_data:
     system_progress -= 0.1
