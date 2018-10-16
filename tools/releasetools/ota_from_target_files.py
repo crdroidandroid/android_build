@@ -849,11 +849,8 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
 
   androidver = target_info.GetBuildProp("ro.crdroid.version")
   romid = target_info.GetBuildProp("ro.modversion")
-  buildtype = target_info.GetBuildProp("ro.build.type")
   buildday = target_info.GetBuildProp("ro.build.date")
   securep = target_info.GetBuildProp("ro.build.version.security_patch")
-  buildhst = target_info.GetBuildProp("ro.build.host")
-  maintainer = target_info.GetBuildProp("ro.build.user")
   manufacturer = target_info.GetBuildProp("ro.product.manufacturer")
   device = target_info.GetBuildProp("ro.product.name")
   codename = target_info.GetBuildProp("ro.lineage.device")
@@ -864,17 +861,14 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.Print(" Security Patch   : %s"%(securep));  
   script.Print(" Build Date       : %s"%(buildday));
   script.Print(" ===============================================");
-  script.Print(" Build Type       : %s"%(buildtype));    
-  script.Print(" Build Host       : %s"%(buildhst));     
-  script.Print(" Maintainer       : %s"%(maintainer));   
-  script.Print(" ===============================================");
   script.Print(" Manufacturer     : %s"%(manufacturer));
   script.Print(" Device           : %s"%(device));           
   script.Print(" Codename         : %s"%(codename));
-  script.Print(" Modem Version    : %s"%(modem)); 
-  script.Print(" Firmware Version : %s"%(firmware)); 
-  script.Print(" Android Version  : %s"%(androidver));
   script.Print(" ==============================================="); 
+  script.Print(" Android Version  : %s"%(androidver));
+  script.Print(" Firmware Version : %s"%(firmware)); 
+  script.Print(" Modem Version    : %s"%(modem)); 
+  script.Print(" ===============================================");
 
   if OPTIONS.wipe_user_data:
     system_progress -= 0.1
