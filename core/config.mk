@@ -95,7 +95,7 @@ $(KATI_obsolete_var TARGET_ANDROID_FILESYSTEM_CONFIG_H,Use TARGET_FS_CONFIG_GEN 
 $(KATI_deprecated_var USER,Use BUILD_USERNAME instead. See $(CHANGES_URL)#USER)
 
 # This is marked as obsolete in envsetup.mk after reading the BoardConfig.mk
-$(KATI_deprecate_export It is a global setting. See $(CHANGES_URL)#export_keyword)
+#$(KATI_deprecate_export It is a global setting. See $(CHANGES_URL)#export_keyword)
 
 # Used to force goals to build.  Only use for conditionally defined goals.
 .PHONY: FORCE
