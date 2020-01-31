@@ -532,7 +532,7 @@ function choosevariant()
             export TARGET_BUILD_VARIANT=$default_value
         elif (echo -n $ANSWER | grep -q -e "^[0-9][0-9]*$") ; then
             if [ "$ANSWER" -le "${#VARIANT_CHOICES[@]}" ] ; then
-                export TARGET_BUILD_VARIANT=${VARIANT_CHOICES[$(($ANSWER-1))]}
+                export TARGET_BUILD_VARIANT=${VARIANT_CHOICES[@]:$(($ANSWER-1)):1}
             fi
         else
             if check_variant $ANSWER
@@ -580,6 +580,7 @@ function add_lunch_combo()
 function print_lunch_menu()
 {
     local uname=$(uname)
+    local choices=$(TARGET_BUILD_APPS= get_build_var COMMON_LUNCH_CHOICES)
     echo
     echo "You're building on" $uname
     echo
@@ -587,7 +588,7 @@ function print_lunch_menu()
 
     local i=1
     local choice
-    for choice in $(TARGET_BUILD_APPS= get_build_var COMMON_LUNCH_CHOICES)
+    for choice in $(echo $choices)
     do
         echo "     $i. $choice"
         i=$(($i+1))
@@ -1323,10 +1324,10 @@ function godir () {
                 echo "Invalid choice"
                 continue
             fi
-            pathname=${lines[$(($choice-1))]}
+            pathname=${lines[@]:$(($choice-1)):1}
         done
     else
-        pathname=${lines[0]}
+        pathname=${lines[@]:0:1}
     fi
     \cd $T/$pathname
 }
@@ -1361,7 +1362,7 @@ function allmod() {
         refreshmod || return 1
     fi
 
-    python -c "import json; print '\n'.join(sorted(json.load(open('$ANDROID_PRODUCT_OUT/module-info.json')).keys()))"
+    python -c "import json; print('\n'.join(sorted(json.load(open('$ANDROID_PRODUCT_OUT/module-info.json')).keys())))"
 }
 
 # Get the path of a specific module in the android tree, as cached in module-info.json. If any build change
@@ -1387,7 +1388,7 @@ module = '$1'
 module_info = json.load(open('$ANDROID_PRODUCT_OUT/module-info.json'))
 if module not in module_info:
     exit(1)
-print module_info[module]['path'][0]" 2>/dev/null)
+print(module_info[module]['path'][0])" 2>/dev/null)
 
     if [ -z "$relpath" ]; then
         echo "Could not find module '$1' (try 'refreshmod' if there have been build changes?)." >&2
