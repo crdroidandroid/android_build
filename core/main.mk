@@ -48,7 +48,7 @@ $(KATI_obsolete_var FILE_NAME_TAG,https://android.googlesource.com/platform/buil
 .KATI_RESTAT: $(BUILD_NUMBER_FILE)
 .KATI_RESTAT: $(BUILD_HOSTNAME_FILE)
 
-DATE_FROM_FILE := date -d @$(BUILD_DATETIME_FROM_FILE)
+DATE_FROM_FILE := date -ud @$(BUILD_DATETIME_FROM_FILE)
 .KATI_READONLY := DATE_FROM_FILE
 
 
