@@ -188,11 +188,10 @@ endif
 # file, tag the module as "gnu".  Search for "*_GPL*", "*_LGPL*" and "*_MPL*"
 # so that we can also find files like MODULE_LICENSE_GPL_AND_AFL
 #
-license_files := $(call find-parent-file,$(LOCAL_PATH),MODULE_LICENSE*)
 gpl_license_file := $(call find-parent-file,$(LOCAL_PATH),MODULE_LICENSE*_GPL* MODULE_LICENSE*_MPL* MODULE_LICENSE*_LGPL*)
 ifneq ($(gpl_license_file),)
   my_module_tags += gnu
-  ALL_GPL_MODULE_LICENSE_FILES := $(sort $(ALL_GPL_MODULE_LICENSE_FILES) $(gpl_license_file))
+  ALL_GPL_MODULE_LICENSE_FILES += $(gpl_license_file)
 endif
 
 LOCAL_MODULE_CLASS := $(strip $(LOCAL_MODULE_CLASS))
@@ -326,9 +325,19 @@ $(error $(LOCAL_PATH): $(module_id) already defined by $($(module_id)))
 endif
 $(module_id) := $(LOCAL_PATH)
 
-intermediates := $(call local-intermediates-dir,,$(LOCAL_2ND_ARCH_VAR_PREFIX),$(my_host_cross))
-intermediates.COMMON := $(call local-intermediates-dir,COMMON)
-generated_sources_dir := $(call local-generated-sources-dir)
+# These are the same as local-intermediates-dir / local-generated-sources dir, but faster
+intermediates.COMMON := $($(my_prefix)OUT_COMMON_INTERMEDIATES)/$(LOCAL_MODULE_CLASS)/$(LOCAL_MODULE)_intermediates
+ifneq (,$(filter $(my_prefix)$(LOCAL_MODULE_CLASS),$(COMMON_MODULE_CLASSES)))
+  intermediates := $($(my_prefix)OUT_COMMON_INTERMEDIATES)/$(LOCAL_MODULE_CLASS)/$(LOCAL_MODULE)_intermediates
+  generated_sources_dir := $($(my_prefix)OUT_COMMON_GEN)/$(LOCAL_MODULE_CLASS)/$(LOCAL_MODULE)_intermediates
+else
+  ifneq (,$(filter $(LOCAL_MODULE_CLASS),$(PER_ARCH_MODULE_CLASSES)))
+    intermediates := $($(LOCAL_2ND_ARCH_VAR_PREFIX)$(my_prefix)OUT_INTERMEDIATES)/$(LOCAL_MODULE_CLASS)/$(LOCAL_MODULE)_intermediates
+  else
+    intermediates := $($(my_prefix)OUT_INTERMEDIATES)/$(LOCAL_MODULE_CLASS)/$(LOCAL_MODULE)_intermediates
+  endif
+  generated_sources_dir := $($(my_prefix)OUT_GEN)/$(LOCAL_MODULE_CLASS)/$(LOCAL_MODULE)_intermediates
+endif
 
 ifneq ($(LOCAL_OVERRIDES_MODULES),)
   ifndef LOCAL_IS_HOST_MODULE
@@ -452,12 +461,33 @@ endif
 
 # Set up phony targets that covers all modules under the given paths.
 # This allows us to build everything in given paths by running mmma/mma.
-my_path_components := $(subst /,$(space),$(LOCAL_PATH))
-my_path_prefix := MODULES-IN
-$(foreach c, $(my_path_components),\
-  $(eval my_path_prefix := $(my_path_prefix)-$(c))\
-  $(eval .PHONY : $(my_path_prefix))\
-  $(eval $(my_path_prefix) : $(my_all_targets)))
+define my_path_comp
+parent := $(patsubst %/,%,$(dir $(1)))
+parent_target := MODULES-IN-$$(subst /,-,$$(parent))
+.PHONY: $$(parent_target)
+$$(parent_target): $(2)
+ifndef $$(parent_target)
+  $$(parent_target) := true
+  ifneq (,$$(findstring /,$$(parent)))
+    $$(eval $$(call my_path_comp,$$(parent),$$(parent_target)))
+  endif
+endif
+endef
+
+_local_path := $(patsubst %/,%,$(LOCAL_PATH))
+_local_path_target := MODULES-IN-$(subst /,-,$(_local_path))
+
+.PHONY: $(_local_path_target)
+$(_local_path_target): $(my_register_name)
+
+ifndef $(_local_path_target)
+  $(_local_path_target) := true
+  $(eval $(call my_path_comp,$(_local_path),$(_local_path_target)))
+endif
+
+_local_path :=
+_local_path_target :=
+my_path_comp :=
 
 ###########################################################
 ## Module installation rule
@@ -523,11 +553,11 @@ my_vintf_installed := $(foreach xml,$(my_vintf_pairs),$(call word-colon,2,$(xml)
 
 # Only set up copy rules once, even if another arch variant shares it
 my_vintf_new_pairs := $(filter-out $(ALL_VINTF_MANIFEST_FRAGMENTS_LIST),$(my_vintf_pairs))
-my_vintf_new_installed := $(call copy-many-vintf-manifest-files-checked,$(my_vintf_pairs))
+my_vintf_new_installed := $(call copy-many-vintf-manifest-files-checked,$(my_vintf_new_pairs))
 
 ALL_VINTF_MANIFEST_FRAGMENTS_LIST += $(my_vintf_new_pairs)
 
-$(my_all_targets) : $(my_vintf_installed)
+$(my_all_targets) : $(my_vintf_new_installed)
 endif # LOCAL_VINTF_FRAGMENTS
 endif # !LOCAL_IS_HOST_MODULE
 endif # !LOCAL_UNINSTALLABLE_MODULE
@@ -736,13 +766,19 @@ endif
 
 ifeq ($(use_testcase_folder),true)
 ifneq ($(my_test_data_file_pairs),)
+# Filter out existng installed test data paths when collecting test data files to be installed and
+# indexed as they cause build rule conflicts. Instead put them in a separate list which is only
+# used for indexing.
 $(foreach pair, $(my_test_data_file_pairs), \
   $(eval parts := $(subst :,$(space),$(pair))) \
   $(eval src_path := $(word 1,$(parts))) \
   $(eval file := $(word 2,$(parts))) \
   $(foreach suite, $(LOCAL_COMPATIBILITY_SUITE), \
     $(eval my_compat_dist_$(suite) += $(foreach dir, $(call compatibility_suite_dirs,$(suite),$(arch_dir)), \
-      $(call filter-copy-pair,$(src_path),$(call append-path,$(dir),$(file)),$(my_installed_test_data))))))
+      $(call filter-copy-pair,$(src_path),$(call append-path,$(dir),$(file)),$(my_installed_test_data)))) \
+    $(eval my_compat_dist_test_data_$(suite) += \
+      $(foreach dir, $(call compatibility_suite_dirs,$(suite),$(arch_dir)), \
+        $(filter $(my_installed_test_data),$(call append-path,$(dir),$(file)))))))
 endif
 else
 ifneq ($(my_test_data_file_pairs),)
@@ -763,7 +799,8 @@ is_native :=
 
 $(call create-suite-dependencies)
 $(foreach suite, $(LOCAL_COMPATIBILITY_SUITE), \
-  $(eval my_compat_dist_config_$(suite) := ))
+  $(eval my_compat_dist_config_$(suite) := ) \
+  $(eval my_compat_dist_test_data_$(suite) := ))
 
 endif  # LOCAL_COMPATIBILITY_SUITE
 
@@ -909,7 +946,7 @@ INSTALLABLE_FILES.$(LOCAL_INSTALLED_MODULE).MODULE := $(my_register_name)
 # Track module-level dependencies.
 # Use $(LOCAL_MODULE) instead of $(my_register_name) to ignore module's bitness.
 ifneq (,$(filter deps-license,$(MAKECMDGOALS)))
-ALL_DEPS.MODULES := $(ALL_DEPS.MODULES) $(LOCAL_MODULE)
+ALL_DEPS.MODULES += $(LOCAL_MODULE)
 ALL_DEPS.$(LOCAL_MODULE).ALL_DEPS := $(sort \
   $(ALL_MODULES.$(LOCAL_MODULE).ALL_DEPS) \
   $(LOCAL_STATIC_LIBRARIES) \
@@ -920,6 +957,7 @@ ALL_DEPS.$(LOCAL_MODULE).ALL_DEPS := $(sort \
   $(LOCAL_JAVA_LIBRARIES)\
   $(LOCAL_JNI_SHARED_LIBRARIES))
 
+license_files := $(call find-parent-file,$(LOCAL_PATH),MODULE_LICENSE*)
 ALL_DEPS.$(LOCAL_MODULE).LICENSE := $(sort $(ALL_DEPS.$(LOCAL_MODULE).LICENSE) $(license_files))
 endif
 

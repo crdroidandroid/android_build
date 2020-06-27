@@ -108,11 +108,17 @@ ALL_VINTF_MANIFEST_FRAGMENTS_LIST:=
 # All tests that should be skipped in presubmit check.
 ALL_DISABLED_PRESUBMIT_TESTS :=
 
+# All compatibility suites mentioned in LOCAL_COMPATIBILITY_SUITES
+ALL_COMPATIBILITY_SUITES :=
+
 # All LINK_TYPE entries
 ALL_LINK_TYPES :=
 
 # All modules already converted to Soong
 SOONG_ALREADY_CONV :=
+
+# ALL_DEPS.*.ALL_DEPS keys
+ALL_DEPS.MODULES :=
 
 ###########################################################
 ## Debugging; prints a variable list to stdout
@@ -559,7 +565,7 @@ $(strip \
         $(error $(LOCAL_PATH): Name not defined in call to intermediates-dir-for)) \
     $(eval _idfPrefix := $(call find-idf-prefix,$(3),$(6))) \
     $(eval _idf2ndArchPrefix := $(if $(strip $(5)),$(TARGET_2ND_ARCH_VAR_PREFIX))) \
-    $(if $(filter $(_idfPrefix)-$(_idfClass),$(COMMON_MODULE_CLASSES))$(4), \
+    $(if $(filter $(_idfPrefix)_$(_idfClass),$(COMMON_MODULE_CLASSES))$(4), \
         $(eval _idfIntBase := $($(_idfPrefix)_OUT_COMMON_INTERMEDIATES)) \
       ,$(if $(filter $(_idfClass),$(PER_ARCH_MODULE_CLASSES)),\
           $(eval _idfIntBase := $($(_idf2ndArchPrefix)$(_idfPrefix)_OUT_INTERMEDIATES)) \
@@ -608,7 +614,7 @@ $(strip \
     $(if $(_idfName),, \
         $(error $(LOCAL_PATH): Name not defined in call to generated-sources-dir-for)) \
     $(eval _idfPrefix := $(call find-idf-prefix,$(3),)) \
-    $(if $(filter $(_idfPrefix)-$(_idfClass),$(COMMON_MODULE_CLASSES))$(4), \
+    $(if $(filter $(_idfPrefix)_$(_idfClass),$(COMMON_MODULE_CLASSES))$(4), \
         $(eval _idfIntBase := $($(_idfPrefix)_OUT_COMMON_GEN)) \
       , \
         $(eval _idfIntBase := $($(_idfPrefix)_OUT_GEN)) \
@@ -3010,11 +3016,15 @@ endef
 #    and use my_compat_dist_$(suite) to define the others.
 define create-suite-dependencies
 $(foreach suite, $(LOCAL_COMPATIBILITY_SUITE), \
-  $(eval COMPATIBILITY.$(suite).FILES := \
-    $$(COMPATIBILITY.$(suite).FILES) $$(foreach f,$$(my_compat_dist_$(suite)),$$(call word-colon,2,$$(f))) \
-      $$(foreach f,$$(my_compat_dist_config_$(suite)),$$(call word-colon,2,$$(f)))) \
-  $(eval COMPATIBILITY.$(suite).MODULES := \
-    $$(COMPATIBILITY.$(suite).MODULES) $$(my_register_name))) \
+  $(if $(filter $(suite),$(ALL_COMPATIBILITY_SUITES)),,\
+    $(eval ALL_COMPATIBILITY_SUITES += $(suite)) \
+    $(eval COMPATIBILITY.$(suite).FILES :=) \
+    $(eval COMPATIBILITY.$(suite).MODULES :=)) \
+  $(eval COMPATIBILITY.$(suite).FILES += \
+    $$(foreach f,$$(my_compat_dist_$(suite)),$$(call word-colon,2,$$(f))) \
+    $$(foreach f,$$(my_compat_dist_config_$(suite)),$$(call word-colon,2,$$(f))) \
+    $$(my_compat_dist_test_data_$(suite))) \
+  $(eval COMPATIBILITY.$(suite).MODULES += $$(my_register_name))) \
 $(eval $(my_all_targets) : $(call copy-many-files, \
   $(sort $(foreach suite,$(LOCAL_COMPATIBILITY_SUITE),$(my_compat_dist_$(suite))))) \
   $(call copy-many-xml-files-checked, \
