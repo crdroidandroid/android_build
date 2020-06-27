@@ -4301,14 +4301,10 @@ else
     OTA_SCRIPT_OVERRIDE_DEVICE := $(TARGET_OTA_ASSERT_DEVICE)
 endif
 
-ifeq ($(TARGET_BUILD_VARIANT),user)
-    $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
+ifeq ($(TARGET_EXCLUDE_BACKUPTOOL),true)
+$(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
 else
-ifneq ($(LINEAGE_BUILD),)
-    $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := true
-else
-    $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
-endif
+$(INTERNAL_OTA_PACKAGE_TARGET): backuptool := true
 endif
 
 $(INTERNAL_OTA_PACKAGE_TARGET): .KATI_IMPLICIT_OUTPUTS := $(INTERNAL_OTA_METADATA)
