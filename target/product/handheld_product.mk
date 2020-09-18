@@ -31,7 +31,6 @@ PRODUCT_PACKAGES += \
     Music \
     OneTimeInitializer \
     preinstalled-packages-platform-handheld-product.xml \
-    QuickSearchBox \
     SettingsIntelligence \
     frameworks-base-overlays
 
