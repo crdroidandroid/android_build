@@ -5928,6 +5928,8 @@ endif
 	@# OTA install helpers
 	$(hide) $(call package_files-copy-root, \
 	    $(TARGET_OUT)/install,$(zip_root)/INSTALL)
+	$(hide) $(call package_files-copy-root, \
+	    $(PRODUCT_OUT)/install,$(zip_root)/INSTALL)
 ifdef INSTALLED_RECOVERY_KERNEL_TARGET
 	# The python script that wraps it all up wants it to be named kernel, so do that
 	cp $(INSTALLED_RECOVERY_KERNEL_TARGET) $(zip_root)/$(PRIVATE_RECOVERY_OUT)/kernel
