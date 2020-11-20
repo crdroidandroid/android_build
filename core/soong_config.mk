@@ -143,6 +143,7 @@ $(call add_json_bool, Malloc_not_svelte_libc32,          $(if $(MALLOC_SVELTE_FO
                                                             $(call invert_bool,$(filter true,$(MALLOC_SVELTE_FOR_LIBC32))),\
                                                             $(call invert_bool,$(filter true,$(MALLOC_SVELTE)))))
 $(call add_json_str,  Override_rs_driver,                $(OVERRIDE_RS_DRIVER))
+$(call add_json_val,  Product_shipping_api_level,        $(PRODUCT_SHIPPING_API_LEVEL))
 
 $(call add_json_bool, UncompressPrivAppDex,              $(call invert_bool,$(filter true,$(DONT_UNCOMPRESS_PRIV_APPS_DEXS))))
 $(call add_json_list, ModulesLoadedByPrivilegedModules,  $(PRODUCT_LOADED_BY_PRIVILEGED_MODULES))
