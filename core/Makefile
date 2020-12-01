@@ -7036,8 +7036,8 @@ include $(sort $(wildcard $(BUILD_SYSTEM)/tasks/*.mk))
 -include $(sort $(wildcard device/*/*/build/tasks/*.mk))
 -include $(sort $(wildcard product/*/*/build/tasks/*.mk))
 # Also add test specifc tasks
-include $(sort $(wildcard platform_testing/build/tasks/*.mk))
-include $(sort $(wildcard test/vts/tools/build/tasks/*.mk))
+#include $(sort $(wildcard platform_testing/build/tasks/*.mk))
+#include $(sort $(wildcard test/vts/tools/build/tasks/*.mk))
 endif
 
 include $(BUILD_SYSTEM)/product-graph.mk
