@@ -4658,9 +4658,19 @@ $(BUILT_TARGET_FILES_PACKAGE): \
 	$(hide) mkdir -p $(dir $@) $(zip_root)
 ifneq (,$(INSTALLED_RECOVERYIMAGE_TARGET)$(filter true,$(BOARD_USES_RECOVERY_AS_BOOT)))
 	@# Components of the recovery image
+ifneq ($(TARGET_PREBUILT_RECOVERY_RAMDISK_CPIO),)
+	$(hide) mkdir -p $(zip_root)/$(PRIVATE_RECOVERY_OUT)
+	$(hide) rm -rf $(PRODUCT_OUT)/prebuilt_recovery
+	$(hide) mkdir -p $(PRODUCT_OUT)/prebuilt_recovery
+	$(hide) cp $(TARGET_PREBUILT_RECOVERY_RAMDISK_CPIO) $(PRODUCT_OUT)/prebuilt_recovery/prebuilt_ramdisk-recovery.cpio
+	$(hide) cd $(PRODUCT_OUT)/prebuilt_recovery && cpio -id < prebuilt_ramdisk-recovery.cpio && rm -f prebuilt_ramdisk-recovery.cpio
+	$(hide) $(call package_files-copy-root, \
+	    $(PRODUCT_OUT)/prebuilt_recovery,$(zip_root)/$(PRIVATE_RECOVERY_OUT)/RAMDISK)
+else
 	$(hide) mkdir -p $(zip_root)/$(PRIVATE_RECOVERY_OUT)
 	$(hide) $(call package_files-copy-root, \
 	    $(TARGET_RECOVERY_ROOT_OUT),$(zip_root)/$(PRIVATE_RECOVERY_OUT)/RAMDISK)
+endif
 	@# OTA install helpers
 	$(hide) $(call package_files-copy-root, \
 	    $(PRODUCT_OUT)/install,$(zip_root)/INSTALL)
