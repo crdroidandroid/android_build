@@ -228,11 +228,6 @@ endif
 DATE := date -d @$(BUILD_DATETIME)
 .KATI_READONLY := DATE
 
-# Everything should be using BUILD_DATETIME_FROM_FILE instead.
-# BUILD_DATETIME and DATE can be removed once BUILD_NUMBER moves
-# to soong_ui.
-$(KATI_obsolete_var BUILD_DATETIME,Use BUILD_DATETIME_FROM_FILE)
-
 HAS_BUILD_NUMBER := true
 ifndef BUILD_NUMBER
   # BUILD_NUMBER should be set to the source control value that
@@ -244,10 +239,15 @@ ifndef BUILD_NUMBER
   # If no BUILD_NUMBER is set, create a useful "I am an engineering build
   # from this date/time" value.  Make it start with a non-digit so that
   # anyone trying to parse it as an integer will probably get "0".
-  BUILD_NUMBER := eng.$(shell echo $${BUILD_USERNAME:0:6}).$(shell $(DATE) +%Y%m%d.%H%M%S)
+  BUILD_NUMBER := $(BUILD_DATETIME)
   HAS_BUILD_NUMBER := false
 endif
 .KATI_READONLY := BUILD_NUMBER HAS_BUILD_NUMBER
+
+# Everything should be using BUILD_DATETIME_FROM_FILE instead.
+# BUILD_DATETIME and DATE can be removed once BUILD_NUMBER moves
+# to soong_ui.
+$(KATI_obsolete_var BUILD_DATETIME,Use BUILD_DATETIME_FROM_FILE)
 
 ifndef PLATFORM_MIN_SUPPORTED_TARGET_SDK_VERSION
   # Used to set minimum supported target sdk version. Apps targeting sdk
