@@ -2257,6 +2257,7 @@ ifneq ($(TARGET_PREBUILT_RECOVERY_RAMDISK),)
 	rm -rf $(PRODUCT_OUT)/prebuilt_recovery
 	mkdir -p $(PRODUCT_OUT)/prebuilt_recovery
 	unzip -o $(TARGET_PREBUILT_RECOVERY_RAMDISK) -d $(PRODUCT_OUT)/prebuilt_recovery/
+	cp -f $(PRODUCT_OUT)/recovery/root/prop.default $(PRODUCT_OUT)/prebuilt_recovery/prop.default
 endif
 	$(BOARD_RECOVERY_IMAGE_PREPARE)
 	@echo ----- Making uncompressed recovery ramdisk ------
