@@ -1106,6 +1106,11 @@ else
   INSTALLED_KERNEL_TARGET :=
 endif
 
+ifneq "$(or $(TARGET_KERNEL_RECOVERY_CONFIG), $(TARGET_PREBUILT_RECOVERY_KERNEL))" ""
+INSTALLED_RECOVERY_KERNEL := $(PRODUCT_OUT)/recovery_kernel
+else
+INSTALLED_RECOVERY_KERNEL := $(INSTALLED_KERNEL_TARGET)
+endif
 # -----------------------------------------------------------------
 # the root dir
 INTERNAL_ROOT_FILES := $(filter $(TARGET_ROOT_OUT)/%, \
@@ -1948,8 +1953,7 @@ recovery_sepolicy := \
 # Passed into rsync from non-recovery root to recovery root, to avoid overwriting recovery-specific
 # SELinux files
 IGNORE_RECOVERY_SEPOLICY := $(patsubst $(TARGET_RECOVERY_OUT)/%,--exclude=/%,$(recovery_sepolicy))
-
-recovery_kernel := $(INSTALLED_KERNEL_TARGET) # same as a non-recovery system
+recovery_kernel := $(INSTALLED_RECOVERY_KERNEL)
 recovery_ramdisk := $(PRODUCT_OUT)/ramdisk-recovery.img
 recovery_uncompressed_ramdisk := $(PRODUCT_OUT)/ramdisk-recovery.cpio
 recovery_resources_common := $(call include-path-for, recovery)/res
@@ -4644,6 +4648,7 @@ $(BUILT_TARGET_FILES_PACKAGE): \
 	    $(INSTALLED_CUSTOMIMAGES_TARGET) \
 	    $(INTERNAL_SYSTEMOTHERIMAGE_FILES) \
 	    $(INSTALLED_ANDROID_INFO_TXT_TARGET) \
+	    $(INSTALLED_RECOVERY_KERNEL) \
 	    $(INSTALLED_KERNEL_TARGET) \
 	    $(INSTALLED_DTBIMAGE_TARGET) \
 	    $(INSTALLED_2NDBOOTLOADER_TARGET) \
@@ -4688,8 +4693,9 @@ endif
 	@# OTA install helpers
 	$(hide) $(call package_files-copy-root, \
 	    $(PRODUCT_OUT)/install,$(zip_root)/INSTALL)
-ifdef INSTALLED_KERNEL_TARGET
-	cp $(INSTALLED_KERNEL_TARGET) $(zip_root)/$(PRIVATE_RECOVERY_OUT)/
+ifdef INSTALLED_RECOVERY_KERNEL
+# The python script that wraps it all up wants it to be named kernel, so do that
+	cp $(INSTALLED_RECOVERY_KERNEL) $(zip_root)/$(PRIVATE_RECOVERY_OUT)/kernel 
 endif
 ifeq (truetrue,$(strip $(BUILDING_VENDOR_BOOT_IMAGE))$(strip $(AB_OTA_UPDATER)))
 	echo "$(GENERIC_KERNEL_CMDLINE)" > $(zip_root)/$(PRIVATE_RECOVERY_OUT)/cmdline
