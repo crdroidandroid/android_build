@@ -105,7 +105,7 @@ $(my_package_zip) : $(my_built_modules)
 	  cp -Rf $(word 1,$(pair)) $(word 2,$(pair)) && ) true
 	$(hide) $(foreach f, $(PRIVATE_PICKUP_FILES),\
 	  cp -RfL $(f) $(PRIVATE_STAGING_DIR) && ) true
-	$(hide) cd $(PRIVATE_STAGING_DIR) && zip -rqX ../$(notdir $@) *
+	$(hide) cd $(PRIVATE_STAGING_DIR) && $(SOONG_ZIP) -rqX ../$(notdir $@) *
 
 my_makefile :=
 my_staging_dir :=
