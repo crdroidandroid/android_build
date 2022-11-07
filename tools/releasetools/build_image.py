@@ -554,10 +554,15 @@ def BuildImage(in_dir, prop_dict, out_file, target_out=None):
           "partition_size" not in prop_dict):
     # If partition_size is not defined, use output of `du' + reserved_size.
     # For compressed file system, it's better to use the compressed size to avoid wasting space.
-    if fs_type.startswith("erofs"):
+    if fs_type.startswith("erofs") or fs_type.startswith("squash"):
       mkfs_output = BuildImageMkfs(
           in_dir, prop_dict, out_file, target_out, fs_config)
-      if "erofs_sparse_flag" in prop_dict and not disable_sparse:
+      sparse_flag = False
+      if fs_type.startswith("erofs") and "erofs_sparse_flag" in prop_dict:
+        sparse_flag = True
+      if fs_type.startswith("squash") and "squashfs_sparse_flag" in prop_dict:
+        sparse_flag = True
+      if sparse_flag and not disable_sparse:
         image_path = UnsparseImage(out_file, replace=False)
         size = GetDiskUsage(image_path)
         os.remove(image_path)
