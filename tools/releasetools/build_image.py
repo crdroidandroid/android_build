@@ -518,16 +518,30 @@ def BuildImage(in_dir, prop_dict, out_file, target_out=None):
   # or None if not applicable.
   verity_image_builder = verity_utils.CreateVerityImageBuilder(prop_dict)
 
+  fs_sparse = False
+  if fs_type.startswith("ext") and "extfs_sparse_flag" in prop_dict:
+    fs_sparse = True
+  elif fs_type.startswith("erofs") and "erofs_sparse_flag" in prop_dict:
+    fs_sparse = True
+  elif fs_type.startswith("f2fs") and "f2fs_sparse_flag" in prop_dict:
+    fs_sparse = True
+  elif fs_type.startswith("squash") and "squashfs_sparse_flag" in prop_dict:
+    fs_sparse = True
+
   disable_sparse = "disable_sparse" in prop_dict
+  sparse_image = False
+  if fs_sparse and not disable_sparse:
+    sparse_image = True
+
   mkfs_output = None
   if (prop_dict.get("use_dynamic_partition_size") == "true" and
           "partition_size" not in prop_dict):
     # If partition_size is not defined, use output of `du' + reserved_size.
     # For compressed file system, it's better to use the compressed size to avoid wasting space.
-    if fs_type.startswith("erofs"):
+    if fs_type.startswith("squash") or fs_type.startswith("erofs"):
       mkfs_output = BuildImageMkfs(
           in_dir, prop_dict, out_file, target_out, fs_config)
-      if "erofs_sparse_flag" in prop_dict and not disable_sparse:
+      if sparse_image:
         image_path = UnsparseImage(out_file, replace=False)
         size = GetDiskUsage(image_path)
         os.remove(image_path)
@@ -549,9 +563,6 @@ def BuildImage(in_dir, prop_dict, out_file, target_out=None):
           "First Pass based on estimates of %d MB and %s inodes.",
           size // BYTES_IN_MB, prop_dict["extfs_inode_count"])
       BuildImageMkfs(in_dir, prop_dict, out_file, target_out, fs_config)
-      sparse_image = False
-      if "extfs_sparse_flag" in prop_dict and not disable_sparse:
-        sparse_image = True
       fs_dict = GetFilesystemCharacteristics(fs_type, out_file, sparse_image)
       os.remove(out_file)
       block_size = int(fs_dict.get("Block size", "4096"))
@@ -594,9 +605,6 @@ def BuildImage(in_dir, prop_dict, out_file, target_out=None):
       prop_dict["partition_size"] = str(size)
       prop_dict["image_size"] = str(size)
       BuildImageMkfs(in_dir, prop_dict, out_file, target_out, fs_config)
-      sparse_image = False
-      if "f2fs_sparse_flag" in prop_dict and not disable_sparse:
-        sparse_image = True
       fs_dict = GetFilesystemCharacteristics(fs_type, out_file, sparse_image)
       os.remove(out_file)
       block_count = int(fs_dict.get("block_count", "0"))
