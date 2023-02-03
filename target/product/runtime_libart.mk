@@ -133,6 +133,8 @@ PRODUCT_SYSTEM_PROPERTIES += \
     pm.dexopt.ab-ota?=speed-profile \
     pm.dexopt.inactive?=verify \
     pm.dexopt.cmdline?=verify \
+    pm.dexopt.first-use?=speed-profile \
+    pm.dexopt.secondary?=speed-profile \
     pm.dexopt.shared?=speed
 
 # Enable resolution of startup const strings.
