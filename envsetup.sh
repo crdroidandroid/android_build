@@ -1209,28 +1209,46 @@ set_global_paths
 source_vendorsetup
 addcompletions
 
-# check and set ccache path on envsetup
-if [ -z "${CCACHE_EXEC}" ]; then
-    if command -v ccache &>/dev/null; then
-        export USE_CCACHE=1
-        export CCACHE_EXEC=$(command -v ccache)
-        [ -z "${CCACHE_DIR}" ] && export CCACHE_DIR="$HOME/.ccache"
-        echo "ccache directory found, CCACHE_DIR set to: $CCACHE_DIR" >&2
-        CCACHE_MAXSIZE="${CCACHE_MAXSIZE:-40G}"
-        DIRECT_MODE="${DIRECT_MODE:-false}"
-        $CCACHE_EXEC -o compression=true -o direct_mode="${DIRECT_MODE}" -M "${CCACHE_MAXSIZE}" \
-            && echo "ccache enabled, CCACHE_EXEC set to: $CCACHE_EXEC, CCACHE_MAXSIZE set to: $CCACHE_MAXSIZE, direct_mode set to: $DIRECT_MODE" >&2 \
-            || echo "Warning: Could not set cache size limit. Please check ccache configuration." >&2
-        CURRENT_CCACHE_SIZE=$(du -sh "$CCACHE_DIR" 2>/dev/null | cut -f1)
-        if [ -n "$CURRENT_CCACHE_SIZE" ]; then
-            echo "Current ccache size is: $CURRENT_CCACHE_SIZE" >&2
+function setup_ccache() {
+    # check and set ccache path on envsetup
+    if [ -z "${CCACHE_EXEC}" ]; then
+        if command -v ccache &>/dev/null; then
+            export USE_CCACHE=1
+            export CCACHE_EXEC=$(command -v ccache)
+            [ -z "${CCACHE_DIR}" ] && export CCACHE_DIR="$HOME/.ccache"
+            echo "ccache directory found, CCACHE_DIR set to: $CCACHE_DIR" >&2
+            CCACHE_MAXSIZE="${CCACHE_MAXSIZE:-40G}"
+            DIRECT_MODE="${DIRECT_MODE:-false}"
+            $CCACHE_EXEC -o compression=true -o direct_mode="${DIRECT_MODE}" -M "${CCACHE_MAXSIZE}" \
+                && echo "ccache enabled, CCACHE_EXEC set to: $CCACHE_EXEC, CCACHE_MAXSIZE set to: $CCACHE_MAXSIZE, direct_mode set to: $DIRECT_MODE" >&2 \
+                || echo "Warning: Could not set cache size limit. Please check ccache configuration." >&2
+            CURRENT_CCACHE_SIZE=$(du -sh "$CCACHE_DIR" 2>/dev/null | cut -f1)
+            if [ -n "$CURRENT_CCACHE_SIZE" ]; then
+                echo "Current ccache size is: $CURRENT_CCACHE_SIZE" >&2
+            else
+                echo "No cached files in ccache." >&2
+            fi
         else
-            echo "No cached files in ccache." >&2
+            echo "Error: ccache not found. Please install ccache." >&2
         fi
-    else
-        echo "Error: ccache not found. Please install ccache." >&2
     fi
-fi
+}
+
+function remove_broken_build_tools() {
+    for file in prebuilts/build-tools/path/*/date; do
+        if [ -e "$file" ]; then
+            rm -rf "$file"
+        fi
+    done
+    for file in prebuilts/build-tools/path/*/tar; do
+        if [ -e "$file" ]; then
+            rm -rf "$file"
+        fi
+    done
+}
+
+remove_broken_build_tools
+setup_ccache
 
 export ANDROID_BUILD_TOP=$(gettop)
 
