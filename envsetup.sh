@@ -1255,7 +1255,23 @@ function setup_ccache() {
     fi
 }
 
+function remove_broken_build_tools() {
+    # Check for files matching each pattern and delete if they exist
+    if ls prebuilts/build-tools/path/*/date >/dev/null 2>&1; then
+        for file in prebuilts/build-tools/path/*/date; do
+            rm -f "$file"  # Remove each date file if it exists
+        done
+    fi
+
+    if ls prebuilts/build-tools/path/*/tar >/dev/null 2>&1; then
+        for file in prebuilts/build-tools/path/*/tar; do
+            rm -f "$file"  # Remove each tar file if it exists
+        done
+    fi
+}
+
 setup_ccache
+remove_broken_build_tools
 
 export ANDROID_BUILD_TOP=$(gettop)
 
