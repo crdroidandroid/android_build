@@ -127,8 +127,6 @@ $(call add_json_list, MemtagHeapExcludePaths,            $(MEMTAG_HEAP_EXCLUDE_P
 $(call add_json_list, MemtagHeapAsyncIncludePaths,       $(MEMTAG_HEAP_ASYNC_INCLUDE_PATHS) $(PRODUCT_MEMTAG_HEAP_ASYNC_INCLUDE_PATHS) $(if $(filter true,$(PRODUCT_MEMTAG_HEAP_SKIP_DEFAULT_PATHS)),,$(PRODUCT_MEMTAG_HEAP_ASYNC_DEFAULT_INCLUDE_PATHS)))
 $(call add_json_list, MemtagHeapSyncIncludePaths,       $(MEMTAG_HEAP_SYNC_INCLUDE_PATHS) $(PRODUCT_MEMTAG_HEAP_SYNC_INCLUDE_PATHS) $(if $(filter true,$(PRODUCT_MEMTAG_HEAP_SKIP_DEFAULT_PATHS)),,$(PRODUCT_MEMTAG_HEAP_SYNC_DEFAULT_INCLUDE_PATHS)))
 
-$(call add_json_bool, DisableScudo,                      $(filter true,$(PRODUCT_DISABLE_SCUDO)))
-
 $(call add_json_bool, ClangTidy,                         $(filter 1 true,$(WITH_TIDY)))
 $(call add_json_str,  TidyChecks,                        $(WITH_TIDY_CHECKS))
 
@@ -155,6 +153,7 @@ $(call add_json_list, ExtraVndkVersions,                 $(PRODUCT_EXTRA_VNDK_VE
 $(call add_json_list, DeviceSystemSdkVersions,           $(BOARD_SYSTEMSDK_VERSIONS))
 $(call add_json_str,  RecoverySnapshotVersion,           $(RECOVERY_SNAPSHOT_VERSION))
 $(call add_json_list, Platform_systemsdk_versions,       $(PLATFORM_SYSTEMSDK_VERSIONS))
+$(call add_json_bool, Malloc_use_scudo,                  $(filter true,$(PRODUCT_USE_SCUDO)))
 $(call add_json_bool, Malloc_not_svelte,                 $(call invert_bool,$(filter true,$(MALLOC_SVELTE))))
 $(call add_json_bool, Malloc_not_svelte_libc32,          $(if $(MALLOC_SVELTE_FOR_LIBC32),\
                                                             $(call invert_bool,$(filter true,$(MALLOC_SVELTE_FOR_LIBC32))),\
