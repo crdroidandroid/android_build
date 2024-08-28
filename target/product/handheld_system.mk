@@ -44,7 +44,6 @@ PRODUCT_PACKAGES += \
     CaptivePortalLogin \
     CertInstaller \
     CredentialManager \
-    DeviceAsWebcam \
     DocumentsUI \
     DownloadProviderUi \
     EasterEgg \
@@ -78,6 +77,11 @@ PRODUCT_PACKAGES += $(RELEASE_PACKAGE_VIRTUAL_CAMERA)
 # RELEASE_PACKAGE_VIRTUAL_CAMERA build. virtual_camera_service_enabled soong config
 # variable is used to prevent accessing the service when it's not present in the build.
 $(call soong_config_set,vdm,virtual_camera_service_enabled,$(if $(RELEASE_PACKAGE_VIRTUAL_CAMERA),true,false))
+
+ifeq ($(TARGET_BUILD_DEVICE_AS_WEBCAM),true)
+    PRODUCT_PACKAGES += \
+        DeviceAsWebcam
+endif
 
 PRODUCT_SYSTEM_SERVER_APPS += \
     FusedLocation \
