@@ -44,7 +44,6 @@ PRODUCT_PACKAGES += \
     CaptivePortalLogin \
     CertInstaller \
     CredentialManager \
-    DeviceAsWebcam \
     DocumentsUI \
     DownloadProviderUi \
     EasterEgg \
@@ -72,6 +71,11 @@ PRODUCT_PACKAGES += \
     UserDictionaryProvider \
     VpnDialogs \
     vr \
+
+ifneq ($(TARGET_BUILD_DEVICE_AS_WEBCAM),false)
+    PRODUCT_PACKAGES += \
+        DeviceAsWebcam
+endif
 
 PRODUCT_PACKAGES += $(RELEASE_PACKAGE_VIRTUAL_CAMERA)
 # Set virtual_camera_service_enabled soong config variable based on the
