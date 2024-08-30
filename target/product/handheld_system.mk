@@ -46,7 +46,6 @@ PRODUCT_PACKAGES += \
     CaptivePortalLogin \
     CertInstaller \
     CredentialManager \
-    DeviceAsWebcam \
     DeviceDiagnostics \
     DocumentsUI \
     DownloadProviderUi \
