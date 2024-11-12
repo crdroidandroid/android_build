@@ -1235,16 +1235,18 @@ function setup_ccache() {
 }
 
 function remove_broken_build_tools() {
-    for file in prebuilts/build-tools/path/*/date; do
-        if [ -e "$file" ]; then
-            rm -rf "$file"
-        fi
-    done
-    for file in prebuilts/build-tools/path/*/tar; do
-        if [ -e "$file" ]; then
-            rm -rf "$file"
-        fi
-    done
+    # Check for files matching each pattern and delete if they exist
+    if ls prebuilts/build-tools/path/*/date >/dev/null 2>&1; then
+        for file in prebuilts/build-tools/path/*/date; do
+            rm -f "$file"  # Remove each date file if it exists
+        done
+    fi
+
+    if ls prebuilts/build-tools/path/*/tar >/dev/null 2>&1; then
+        for file in prebuilts/build-tools/path/*/tar; do
+            rm -f "$file"  # Remove each tar file if it exists
+        done
+    fi
 }
 
 remove_broken_build_tools
