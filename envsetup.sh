@@ -1145,7 +1145,6 @@ unset treegrep
 
 validate_current_shell
 set_global_paths
-source_vendorsetup
 addcompletions
 
 function setup_ccache() {
