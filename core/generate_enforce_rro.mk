@@ -1,6 +1,8 @@
 include $(CLEAR_VARS)
 
-enforce_rro_module := $(enforce_rro_source_module)__$(PRODUCT_NAME)__auto_generated_rro_$(enforce_rro_partition)
+enforce_rro_product_name := $(subst lineage_,aosp_,$(PRODUCT_NAME))
+enforce_rro_override_module := $(subst Lineage,AOSP,$(subst lineage,aosp,$(subst lineageos,aosp,$(enforce_rro_source_module))))
+enforce_rro_module := $(enforce_rro_override_module)__$(enforce_rro_product_name)__auto_generated_rro_$(enforce_rro_partition)
 LOCAL_PACKAGE_NAME := $(enforce_rro_module)
 
 intermediates := $(call intermediates-dir-for,APPS,$(LOCAL_PACKAGE_NAME),,COMMON)
