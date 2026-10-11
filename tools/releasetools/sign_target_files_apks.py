@@ -1740,7 +1740,7 @@ def IsErofsImage(filename):
     Checks if the given file is an EROFS image by verifying its magic number.
     """
 
-    if not os.path.exists(filepath):
+    if not os.path.exists(filename):
       return False
     if os.path.getsize(filename) < 4096:
       return False
