@@ -39,7 +39,7 @@ define generate-common-build-props
     echo "ro.product.$(1).device=$${DeviceName:-$(TARGET_DEVICE)}" >> $(2);\
     echo "ro.product.$(1).manufacturer=$(PRODUCT_MANUFACTURER)" >> $(2);\
     echo "ro.product.$(1).model=$${ProductModel:-$(PRODUCT_MODEL)}" >> $(2);\
-    echo "ro.product.$(1).name=$${DeviceProduct:-$(TARGET_PRODUCT)}" >> $(2);\
+    echo "ro.product.$(1).name=$${DeviceProduct:-$(PRODUCT_DEVICE)}" >> $(2);\
     if [ -n "$(strip $(PRODUCT_MODEL_FOR_ATTESTATION))" ]; then \
         echo "ro.product.model_for_attestation=$(PRODUCT_MODEL_FOR_ATTESTATION)" >> $(2);\
     fi; \
