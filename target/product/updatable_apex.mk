@@ -17,4 +17,8 @@
 # com.android.apex.cts.shim.v1_prebuilt overrides CtsShimPrebuilt
 # and CtsShimPrivPrebuilt since they are packaged inside the APEX.
 PRODUCT_PACKAGES += com.android.apex.cts.shim.v1_prebuilt
+# Products that ship fixed APEX payloads can opt out without creating duplicate
+# ro.apex.updatable assignments in their product makefiles.
+ifneq ($(PRODUCT_DISABLE_UPDATABLE_APEX),true)
 PRODUCT_SYSTEM_PROPERTIES += ro.apex.updatable=true
+endif
